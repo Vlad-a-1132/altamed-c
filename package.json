@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "NEXT_TELEMETRY_DISABLED=1 next build",
+    "build:cloudflare": "NEXT_TELEMETRY_DISABLED=1 next build && npx next export",
     "start": "next start",
     "lint": "next lint",
     "prisma:generate": "prisma generate",
