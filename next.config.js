@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Отключаем телеметрию Next.js
-  telemetry: false,
-  
   // Настройки для Cloudflare Pages
   output: 'export',
   trailingSlash: true,
