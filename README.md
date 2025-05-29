@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Альтамед-с - Медицинский центр
 
-## Getting Started
+Веб-сайт для медицинского центра "Альтамед-с", разработанный с использованием Next.js, TypeScript, Prisma ORM и PostgreSQL.
 
-First, run the development server:
+## Технологии
 
+- **Frontend**: Next.js, React, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes, Prisma ORM
+- **Database**: PostgreSQL
+- **Styling**: Tailwind CSS
+- **Deployment**: Vercel (рекомендуется)
+
+## Особенности проекта
+
+- Современный UI дизайн с использованием Tailwind CSS
+- Полностью адаптивный интерфейс для мобильных устройств и десктопов
+- Взаимодействие с базой данных через Prisma ORM
+- API-маршруты для работы с данными
+- Многоязычный интерфейс (русский)
+
+## Настройка проекта
+
+### Предварительные требования
+
+- Node.js 18.x или выше
+- PostgreSQL 13.x или выше
+- npm или yarn
+
+### Установка
+
+1. Клонировать репозиторий:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/altamed-sait.git
+cd altamed-sait
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Установить зависимости:
+```bash
+npm install
+# или
+yarn install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Настроить переменные окружения:
+   - Создать файл `.env` в корне проекта со следующим содержимым:
+   ```
+   DATABASE_URL="postgresql://username:password@localhost:5432/altamed_db?schema=public"
+   ```
+   - Замените `username`, `password` и другие параметры на ваши данные подключения к PostgreSQL
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Настроить базу данных:
+```bash
+# Сгенерировать Prisma клиент
+npm run prisma:generate
 
-## Learn More
+# Создать таблицы в базе данных
+npm run db:push
 
-To learn more about Next.js, take a look at the following resources:
+# Заполнить базу данными для разработки
+npm run db:seed
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Запустить проект в режиме разработки:
+```bash
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+После запуска проект будет доступен по адресу [http://localhost:3000](http://localhost:3000).
 
-## Deploy on Vercel
+## Структура проекта
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `/src/app` - Страницы приложения и API-маршруты (Next.js App Router)
+- `/src/components` - Многоразовые React компоненты
+- `/src/lib` - Утилиты и библиотеки
+- `/prisma` - Схема базы данных и миграции Prisma
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Основные страницы
+
+- **Главная** (`/`) - Основная информация о клинике
+- **Услуги** (`/services`) - Список медицинских услуг по категориям
+- **Врачи** (`/doctors`) - Информация о врачах клиники
+- **Запись на прием** (`/appointments`) - Форма для записи к врачу
+- **Блог** (`/blog`) - Медицинские статьи и новости
+- **О нас** (`/about`) - Информация о клинике
+- **Контакты** (`/contacts`) - Контактная информация и карта
+
+## API эндпоинты
+
+- `/api/doctors` - Управление врачами
+- `/api/services` - Управление услугами
+- `/api/categories` - Управление категориями услуг
+- `/api/appointments` - Управление записями на прием
+- `/api/articles` - Управление статьями блога
+
+## Команды
+
+- `npm run dev` - Запуск сервера разработки
+- `npm run build` - Сборка проекта для продакшн
+- `npm run start` - Запуск собранного проекта
+- `npm run lint` - Проверка кода с помощью ESLint
+- `npm run prisma:generate` - Генерация Prisma клиента
+- `npm run prisma:migrate` - Создание миграции базы данных
+- `npm run prisma:studio` - Запуск Prisma Studio для управления данными
+- `npm run db:push` - Применение схемы Prisma к базе данных
+- `npm run db:seed` - Заполнение базы данных тестовыми данными
+
+## Лицензия
+
+Copyright © 2024 Альтамед-с

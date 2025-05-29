@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Doctor {
+  id              Int       @id @default(autoincrement())
+  name            String
+  specialization  String
+  photo           String?
+  description     String?
+  experience      Int?
+  appointments    Appointment[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  services    Service[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Appointment {
+  id          Int       @id @default(autoincrement())
+  date        DateTime
+  patient     Patient   @relation(fields: [patientId], references: [id])
+  patientId   Int
+  doctor      Doctor    @relation(fields: [doctorId], references: [id])
+  doctorId    Int
+  status      String    @default("pending") // pending, confirmed, completed, cancelled
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Patient {
+  id           Int          @id @default(autoincrement())
+  name         String
+  email        String       @unique
+  phone        String?
+  appointments Appointment[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model Article {
+  id          Int       @id @default(autoincrement())
+  title       String
+  content     String
+  image       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Review {
+  id          Int       @id @default(autoincrement())
+  author      String
+  content     String
+  rating      Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model ContactInfo {
+  id          Int       @id @default(autoincrement())
+  address     String
+  phone       String
+  email       String
+  workHours   String
+  mapLocation String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
