@@ -14,18 +14,21 @@ npm error Missing: @jridgewell/trace-mapping@0.3.9 from lock file
 3. Зафиксируйте изменения: `git add . && git commit -m "Fix package-lock"`
 4. Загрузите на GitHub: `git push`
 
-### Проблема с телеметрией Next.js
-Если сборка висит на телеметрии:
+### Проблема с Next.js конфигурацией
+Если возникает ошибка:
 ```
-Внимание: Next.js теперь собирает полностью анонимную телеметрию об использовании.
+⚠ Обнаружены недопустимые параметры next.config.js:
+⚠ Нераспознанный ключ(и) в объекте: «телеметрия»
 ```
 
 **Решение:**
-Телеметрия отключена в `next.config.js` и переменных окружения.
+Опция `telemetry` удалена из `next.config.js`. Телеметрия отключается через:
+- Файл `.npmrc` с настройкой `next-telemetry-disabled=1`
+- Переменную окружения `NEXT_TELEMETRY_DISABLED=1`
 
 ## Платформы для деплоя
 
-### 1. Cloudflare Pages (Новая инструкция)
+### 1. Cloudflare Pages (Рекомендуется)
 
 **Настройки сборки для Cloudflare:**
 - Build command: `npm run build`
@@ -50,7 +53,7 @@ NODE_ENV=production
 5. Добавьте переменные окружения
 6. Deploy
 
-### 2. Vercel (Рекомендуется)
+### 2. Vercel
 
 **Автоматический деплой:**
 1. Зайдите на [vercel.com](https://vercel.com)
@@ -116,18 +119,22 @@ NEXTAUTH_SECRET=random_secret_string
 ## Оптимизация для продакшена
 
 ### 1. Настройки Next.js
-В `next.config.js` добавлено:
-- Отключение телеметрии
-- Статический экспорт для Cloudflare/Netlify
-- Оптимизация изображений
+В `next.config.js` настроено:
+- Статический экспорт для Cloudflare/Netlify (`output: 'export'`)
+- Неоптимизированные изображения (`images: { unoptimized: true }`)
+- Завершающие слэши (`trailingSlash: true`)
 - Сжатие и кэширование
 
-### 2. Performance
+### 2. Отключение телеметрии
+- Файл `.npmrc` с настройкой `next-telemetry-disabled=1`
+- Переменная окружения `NEXT_TELEMETRY_DISABLED=1`
+
+### 3. Performance
 - Все изображения оптимизированы
 - Используется lazy loading
 - Минимизированный CSS/JS
 
-### 3. SEO
+### 4. SEO
 - Meta теги настроены
 - Sitemap готов к генерации
 - Open Graph поддержка
@@ -138,6 +145,10 @@ NEXTAUTH_SECRET=random_secret_string
 1. Убедитесь что `NEXT_TELEMETRY_DISABLED=1` добавлена в переменные окружения
 2. Проверьте что Build command: `npm run build`
 3. Проверьте что Build output directory: `out`
+
+### Ошибка "invalid next.config.js":
+- Убедитесь что в `next.config.js` нет опции `telemetry`
+- Телеметрия отключается через `.npmrc` и переменные окружения
 
 ### Изображения не загружаются:
 - В `next.config.js` установлено `images: { unoptimized: true }`
