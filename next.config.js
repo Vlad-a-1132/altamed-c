@@ -22,11 +22,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
-  
-  // Экспериментальные функции для Cloudflare
-  experimental: {
-    runtime: 'nodejs',
-  },
 }
 
 module.exports = nextConfig 
