@@ -1,6 +1,15 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 
+type WhereClause = {
+  doctorId?: number;
+  patientId?: number;
+  date?: {
+    gte: Date;
+    lte: Date;
+  };
+};
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -8,7 +17,7 @@ export async function GET(request: Request) {
     const patientId = searchParams.get('patientId');
     const date = searchParams.get('date');
     
-    const whereClause: any = {};
+    const whereClause: WhereClause = {};
     
     if (doctorId) {
       whereClause.doctorId = parseInt(doctorId);

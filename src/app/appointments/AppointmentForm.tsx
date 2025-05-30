@@ -223,7 +223,7 @@ export default function AppointmentForm() {
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="">Выберите врача</option>
-            {doctors.map((doctor) => (
+            {doctors.map((doctor: Doctor) => (
               <option key={doctor.id} value={doctor.id}>
                 {doctor.name} - {doctor.specialization}
               </option>

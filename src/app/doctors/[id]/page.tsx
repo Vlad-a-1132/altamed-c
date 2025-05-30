@@ -16,9 +16,9 @@ async function getDoctor(id: number) {
   }
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const doctorId = parseInt(params.id);
-  const doctor = await getDoctor(doctorId);
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const doctor = await getDoctor(parseInt(id));
   
   if (!doctor) {
     return {
@@ -33,9 +33,9 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   };
 }
 
-export default async function DoctorPage({ params }: { params: { id: string } }) {
-  const doctorId = parseInt(params.id);
-  const doctor = await getDoctor(doctorId);
+export default async function DoctorPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const doctor = await getDoctor(parseInt(id));
   
   if (!doctor) {
     notFound();
@@ -94,12 +94,12 @@ export default async function DoctorPage({ params }: { params: { id: string } })
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Образование и квалификация</h2>
                 <ul className="space-y-4">
                   <li className="bg-gray-50 p-4 rounded-lg">
-                    <div className="text-lg font-medium">Первый Московский государственный медицинский университет имени И.М. Сеченова</div>
-                    <div className="text-gray-600">Факультет лечебного дела, {2010 - (doctor.experience || 0) - 6}</div>
+                    <div className="text-lg font-medium">Высшее медицинское образование</div>
+                    <div className="text-gray-600">Специализация: {doctor.specialization}</div>
                   </li>
                   <li className="bg-gray-50 p-4 rounded-lg">
                     <div className="text-lg font-medium">Интернатура</div>
-                    <div className="text-gray-600">Специализация: {doctor.specialization}, {2011 - (doctor.experience || 0) - 6}</div>
+                    <div className="text-gray-600">Специализация: {doctor.specialization}, {2024 - (doctor.experience || 0) - 6}</div>
                   </li>
                   <li className="bg-gray-50 p-4 rounded-lg">
                     <div className="text-lg font-medium">Повышение квалификации</div>

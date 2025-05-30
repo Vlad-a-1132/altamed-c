@@ -77,6 +77,17 @@ export interface Article {
   updatedAt: string;
 }
 
+// Create appointment data interface
+export interface CreateAppointmentData {
+  fullName: string;
+  email: string;
+  phone: string;
+  doctorId: string;
+  appointmentDate: string;
+  appointmentTime: string;
+  notes?: string;
+}
+
 // API functions for fetching data
 
 // Fetch all doctors
@@ -144,7 +155,7 @@ export async function getArticle(id: number): Promise<Article> {
 }
 
 // Create an appointment
-export async function createAppointment(appointmentData: any): Promise<Appointment> {
+export async function createAppointment(appointmentData: CreateAppointmentData): Promise<Appointment> {
   const response = await fetch(`${API_BASE_URL}/api/appointments`, {
     method: 'POST',
     headers: {

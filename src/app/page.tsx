@@ -7,7 +7,28 @@ import { useState, useEffect, useRef } from "react";
 // Add TypeScript declaration for Yandex Maps
 declare global {
   interface Window {
-    ymaps: any;
+    ymaps: {
+      ready: (callback: () => void) => void;
+      Map: new (container: HTMLElement, options: {
+        center: [number, number];
+        zoom: number;
+        controls: string[];
+      }) => {
+        geoObjects: {
+          add: (marker: unknown) => void;
+        };
+      };
+      Placemark: new (
+        coordinates: [number, number],
+        properties: {
+          balloonContent: string;
+          hintContent: string;
+        },
+        options: {
+          preset: string;
+        }
+      ) => unknown;
+    };
   }
 }
 
@@ -15,6 +36,7 @@ export default function Home() {
   // State for tracking current slide
   const [currentSlide, setCurrentSlide] = useState(0);
   const mapRef = useRef(null);
+  const mobileMapRef = useRef(null); // Добавляем ref для мобильной карты
   const [mapLoaded, setMapLoaded] = useState(false);
   
   // Ref for doctors slider
@@ -27,7 +49,7 @@ export default function Home() {
       buttonText: "Найти врача",
       buttonLink: "/doctors",
       buttonColor: "#13AB7B",
-      image: "/images/baner/banner2.webp"
+      image: "/images/baner/banner.webp"
     },
     {
       title: "КТ диагностика",
@@ -48,7 +70,7 @@ export default function Home() {
       buttonText: "Записаться",
       buttonLink: "/appointments",
       buttonColor: "#EF4444",
-      image: "/images/baner/banner2.webp"
+      image: "/images/baner/PROMOKT2.png"
     }
   ];
 
@@ -68,6 +90,7 @@ export default function Home() {
   };
   
   // Массив услуг для правой колонки
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const services = [
     { title: "Хирургия", link: "/services/surgery" },
     { title: "Детский терапевт", link: "/services/pediatric-therapist" },
@@ -81,6 +104,7 @@ export default function Home() {
   ];
 
   // Интересы для нижней секции
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const interests = [
     { title: "Специалисты", icon: "👨‍⚕️", link: "/doctors" },
     { title: "Анализы", icon: "🧪", link: "/analyses" },
@@ -100,43 +124,89 @@ export default function Home() {
     }
   }, [mapLoaded]);
 
+  // Автоматическое переключение слайдов
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    }, 5000); // Меняем слайд каждые 5 секунд
+
+    return () => clearInterval(interval); // Очищаем интервал при размонтировании
+  }, [slides.length]);
+
   // Initialize map
   const initMap = () => {
-    if (window.ymaps && mapRef.current) {
+    if (window.ymaps) {
       window.ymaps.ready(() => {
-        // Create map instance
-        const map = new window.ymaps.Map(mapRef.current, {
-          center: [55.687756, 37.299865], // Coordinates from the provided link
-          zoom: 13,
-          controls: ['zoomControl', 'fullscreenControl']
-        });
+        // Desktop map
+        if (mapRef.current) {
+          const map = new window.ymaps.Map(mapRef.current, {
+            center: [55.687756, 37.299865], // Coordinates from the provided link
+            zoom: 13,
+            controls: ['zoomControl', 'fullscreenControl']
+          });
 
-        // Add markers for Altamed-S locations
-        const marker1 = new window.ymaps.Placemark(
-          [55.687756, 37.299865], // Coordinates for Маршала Крылова
-          {
-            balloonContent: '<strong>Альтамед-С</strong><br>г. Одинцово, Маршала Крылова, д. 23',
-            hintContent: 'Альтамед-С ⭐ 4.7'
-          },
-          {
-            preset: 'islands#greenMedicalIcon'
-          }
-        );
+          // Add markers for Altamed-S locations
+          const marker1 = new window.ymaps.Placemark(
+            [55.687756, 37.299865], // Coordinates for Маршала Крылова
+            {
+              balloonContent: '<strong>Альтамед-С</strong><br>г. Одинцово, Маршала Крылова, д. 23',
+              hintContent: 'Альтамед-С ⭐ 4.7'
+            },
+            {
+              preset: 'islands#greenMedicalIcon'
+            }
+          );
 
-        const marker2 = new window.ymaps.Placemark(
-          [55.679408, 37.281685], // Approximate coordinates for Можайское шоссе
-          {
-            balloonContent: '<strong>Альтамед-С</strong><br>г. Одинцово, Можайское шоссе, д. 141',
-            hintContent: 'Альтамед-С ⭐ 4.7'
-          },
-          {
-            preset: 'islands#greenMedicalIcon'
-          }
-        );
+          const marker2 = new window.ymaps.Placemark(
+            [55.679408, 37.281685], // Approximate coordinates for Можайское шоссе
+            {
+              balloonContent: '<strong>Альтамед-С</strong><br>г. Одинцово, Можайское шоссе, д. 141',
+              hintContent: 'Альтамед-С ⭐ 4.7'
+            },
+            {
+              preset: 'islands#greenMedicalIcon'
+            }
+          );
 
-        // Add markers to the map
-        map.geoObjects.add(marker1);
-        map.geoObjects.add(marker2);
+          // Add markers to the map
+          map.geoObjects.add(marker1);
+          map.geoObjects.add(marker2);
+        }
+
+        // Mobile map
+        if (mobileMapRef.current) {
+          const mobileMap = new window.ymaps.Map(mobileMapRef.current, {
+            center: [55.687756, 37.299865],
+            zoom: 12,
+            controls: ['zoomControl']
+          });
+
+          // Add markers for mobile map
+          const mobileMarker1 = new window.ymaps.Placemark(
+            [55.687756, 37.299865],
+            {
+              balloonContent: '<strong>Альтамед-С</strong><br>г. Одинцово, Маршала Крылова, д. 23<br>⭐ 4.7',
+              hintContent: 'Альтамед-С ⭐ 4.7'
+            },
+            {
+              preset: 'islands#greenMedicalIcon'
+            }
+          );
+
+          const mobileMarker2 = new window.ymaps.Placemark(
+            [55.679408, 37.281685],
+            {
+              balloonContent: '<strong>Альтамед-С</strong><br>г. Одинцово, Можайское шоссе, д. 141<br>⭐ 4.7',
+              hintContent: 'Альтамед-С ⭐ 4.7'
+            },
+            {
+              preset: 'islands#greenMedicalIcon'
+            }
+          );
+
+          mobileMap.geoObjects.add(mobileMarker1);
+          mobileMap.geoObjects.add(mobileMarker2);
+        }
       });
     }
   };
@@ -204,6 +274,7 @@ export default function Home() {
                     alt={slides[currentSlide].title}
                     fill
                     className=""
+                    unoptimized
           priority
         />
                 </div>
@@ -540,30 +611,41 @@ export default function Home() {
 
             {/* Мобильная карта */}
             <div className="md:hidden w-full mx-auto px-4 mt-6">
-              <div className="w-full h-[250px] rounded-[20px] overflow-hidden mb-4 relative bg-gradient-to-br from-green-100 to-blue-100">
-                <div className="w-full h-full flex flex-col items-center justify-center relative">
-                  <div className="text-center z-10">
-                    <p className="font-medium text-base mb-2">г. Одинцово,</p>
-                    <p className="font-medium text-base mb-4">Маршала Крылова, д. 23</p>
-                    <p className="font-medium text-base mb-2">г. Одинцово,</p>
-                    <p className="font-medium text-base">Можайское шоссе, д. 141</p>
-                  </div>
-                  <div className="absolute right-4 top-4 bg-white rounded-full p-2 text-xs shadow-sm">
-                    Альтамед-С ⭐ 4.7
-                  </div>
-                  
-                  {/* Добавляем иконки локации */}
-                  <div className="absolute left-6 top-16 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
-                  </div>
-                  <div className="absolute right-8 bottom-20 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
-                  </div>
+              <div className="w-full h-[250px] rounded-[20px] overflow-hidden mb-4 relative">
+                <div ref={mobileMapRef} className="w-full h-full">
+                  {/* Fallback content while map is loading */}
+                  {!mapLoaded && (
+                    <div className="w-full h-full bg-gradient-to-br from-green-100 to-blue-100 flex flex-col items-center justify-center relative">
+                      <div className="text-center z-10">
+                        <p className="font-medium text-base mb-2">г. Одинцово,</p>
+                        <p className="font-medium text-base mb-4">Маршала Крылова, д. 23</p>
+                        <p className="font-medium text-base mb-2">г. Одинцово,</p>
+                        <p className="font-medium text-base">Можайское шоссе, д. 141</p>
+                      </div>
+                      <div className="absolute right-4 top-4 bg-white rounded-full p-2 text-xs shadow-sm">
+                        Альтамед-С ⭐ 4.7
+                      </div>
+                      
+                      {/* Добавляем иконки локации */}
+                      <div className="absolute left-6 top-16 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                      </div>
+                      <div className="absolute right-8 bottom-20 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               
               {/* Кнопка "Найти клинику" */}
-              <button className="w-full bg-emerald-500 text-white py-3 rounded-full flex items-center justify-center font-medium text-sm">
+              <button 
+                className="w-full bg-emerald-500 text-white py-3 rounded-full flex items-center justify-center font-medium text-sm hover:bg-emerald-600 transition-colors"
+                onClick={() => {
+                  // Открываем Яндекс карты с маршрутом
+                  window.open('https://yandex.ru/maps/org/altamed_s/1076393023/', '_blank');
+                }}
+              >
                 Найти клинику
                 <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

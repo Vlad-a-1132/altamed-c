@@ -7,8 +7,20 @@ export const metadata = {
   description: 'Наши высококвалифицированные специалисты в медицинском центре Альтамед-с',
 };
 
+// Define doctor type
+type Doctor = {
+  id: number;
+  name: string;
+  specialization: string;
+  experience: number | null;
+  photo: string | null;
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 // Use server component to fetch doctors
-async function getDoctors() {
+async function getDoctors(): Promise<Doctor[]> {
   try {
     const doctors = await prisma.doctor.findMany({
       orderBy: {
@@ -75,7 +87,7 @@ export default async function DoctorsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {doctors.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {doctors.map((doctor) => (
+              {doctors.map((doctor: Doctor) => (
                 <div key={doctor.id} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition border border-gray-100">
                   <div className="relative h-80 w-full">
                     <Image 
@@ -88,7 +100,7 @@ export default async function DoctorsPage() {
                   <div className="p-6">
                     <h2 className="text-xl font-semibold text-gray-900 mb-1">{doctor.name}</h2>
                     <p className="text-blue-600 mb-4">{doctor.specialization}</p>
-                    <p className="text-gray-600 mb-4">Опыт работы: {doctor.experience} лет</p>
+                    <p className="text-gray-600 mb-4">Опыт работы: {doctor.experience || 0} лет</p>
                     <Link href={`/doctors/${doctor.id}`} className="text-blue-600 font-medium hover:text-blue-700 transition">
                       Подробнее →
                     </Link>

@@ -3,22 +3,19 @@ import prisma from '@/lib/db';
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const doctorId = parseInt(params.id);
+    const { id } = await params;
+    const doctorId = parseInt(id);
     
     const doctor = await prisma.doctor.findUnique({
       where: {
         id: doctorId,
       },
       include: {
-        appointments: {
-          include: {
-            patient: true
-          }
-        }
-      }
+        appointments: true,
+      },
     });
     
     if (!doctor) {
@@ -40,10 +37,11 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const doctorId = parseInt(params.id);
+    const { id } = await params;
+    const doctorId = parseInt(id);
     const body = await request.json();
     
     const doctor = await prisma.doctor.update({
@@ -53,9 +51,9 @@ export async function PUT(
       data: {
         name: body.name,
         specialization: body.specialization,
+        experience: body.experience,
         photo: body.photo,
         description: body.description,
-        experience: body.experience ? parseInt(body.experience) : null,
       },
     });
     
@@ -71,26 +69,12 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const doctorId = parseInt(params.id);
+    const { id } = await params;
+    const doctorId = parseInt(id);
     
-    // Check if doctor has any appointments
-    const appointments = await prisma.appointment.findMany({
-      where: {
-        doctorId: doctorId
-      }
-    });
-    
-    if (appointments.length > 0) {
-      return NextResponse.json(
-        { error: 'Cannot delete doctor with existing appointments' },
-        { status: 400 }
-      );
-    }
-    
-    // Delete the doctor
     await prisma.doctor.delete({
       where: {
         id: doctorId,

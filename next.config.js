@@ -1,10 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Настройки для Cloudflare Pages
-  output: 'export',
-  trailingSlash: true,
-  
-  // Настройки изображений для статического экспорта
+  // Настройки изображений
   images: {
     unoptimized: true,
   },

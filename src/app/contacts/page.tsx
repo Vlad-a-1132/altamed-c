@@ -99,8 +99,8 @@ export default function ContactsPage() {
               <div className="mb-4">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Проезд на общественном транспорте:</h3>
                 <ul className="list-disc list-inside text-gray-600 space-y-1">
-                  <li>Метро "Медицинская" - выход №3, далее 5 минут пешком</li>
-                  <li>Автобусы №123, 456 - остановка "Медицинская улица"</li>
+                  <li>Метро &ldquo;Медицинская&rdquo; - выход №3, далее 5 минут пешком</li>
+                  <li>Автобусы №123, 456 - остановка &ldquo;Медицинская улица&rdquo;</li>
                 </ul>
               </div>
               <div>
@@ -119,7 +119,7 @@ export default function ContactsPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <p className="text-gray-600">
-                    Медицинский центр "Альтамед-с" работает для вас ежедневно, кроме воскресенья.
+                    Медицинский центр &ldquo;Альтамед-с&rdquo; работает для вас ежедневно, кроме воскресенья.
                   </p>
                 </div>
                 
