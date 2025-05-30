@@ -1,42 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import prisma from '@/lib/db';
+import { doctors } from '@/data/static-data';
 
 export const metadata = {
   title: 'Врачи | Альтамед-с',
   description: 'Наши высококвалифицированные специалисты в медицинском центре Альтамед-с',
 };
 
-// Define doctor type
-type Doctor = {
-  id: number;
-  name: string;
-  specialization: string;
-  experience: number | null;
-  photo: string | null;
-  description: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-// Use server component to fetch doctors
-async function getDoctors(): Promise<Doctor[]> {
-  try {
-    const doctors = await prisma.doctor.findMany({
-      orderBy: {
-        name: 'asc',
-      },
-    });
-    return doctors;
-  } catch (error) {
-    console.error('Error fetching doctors:', error);
-    return [];
-  }
-}
-
-export default async function DoctorsPage() {
-  const doctors = await getDoctors();
-
+export default function DoctorsPage() {
   const whyChooseUs = [
     {
       title: 'Высокая квалификация',
@@ -87,7 +58,7 @@ export default async function DoctorsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {doctors.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {doctors.map((doctor: Doctor) => (
+              {doctors.map((doctor) => (
                 <div key={doctor.id} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition border border-gray-100">
                   <div className="relative h-80 w-full">
                     <Image 
