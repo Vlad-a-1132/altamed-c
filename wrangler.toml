@@ -1,17 +1,25 @@
 name = "altamed-c"
 compatibility_date = "2025-05-30"
 
-[env.production]
-name = "altamed-c"
-
 # Настройки для Next.js на Cloudflare Pages
 compatibility_flags = ["nodejs_compat"]
 
-# Переменные окружения (добавьте свои значения в Cloudflare Dashboard)
-[env.production.vars]
+# Переменные окружения
+[vars]
 NODE_ENV = "production"
 NEXT_TELEMETRY_DISABLED = "1"
 
-# Настройки для статических ресурсов
-[site]
-bucket = ".next" 
+# Настройки для Cloudflare Pages
+[build]
+command = "npm run build"
+cwd = ""
+watch_dir = "src"
+
+# Настройки для продакшн окружения
+[env.production]
+name = "altamed-c"
+compatibility_flags = ["nodejs_compat"]
+
+[env.production.vars]
+NODE_ENV = "production"
+NEXT_TELEMETRY_DISABLED = "1" 

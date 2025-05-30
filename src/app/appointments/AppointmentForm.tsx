@@ -1,22 +1,15 @@
 'use client'
 
-import { useState, FormEvent, useEffect } from 'react'
+import { useState, FormEvent } from 'react'
+import { doctors, services } from '@/data/static-data'
 
 interface Doctor {
-  id: number;
-  name: string;
-  specialization: string;
-}
-
-interface Service {
-  id: number;
-  name: string;
-  price: number;
-  categoryId: number;
-  category: {
-    id: number;
-    name: string;
-  };
+  id: number
+  name: string
+  specialization: string
+  experience: number
+  photo: string
+  description: string
 }
 
 export default function AppointmentForm() {
@@ -30,37 +23,10 @@ export default function AppointmentForm() {
     appointmentTime: '',
     notes: ''
   })
-
+  
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-  const [doctors, setDoctors] = useState<Doctor[]>([])
-  const [services, setServices] = useState<Service[]>([])
-
-  // Fetch doctors and services on component mount
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch doctors
-        const doctorsResponse = await fetch('/api/doctors');
-        if (doctorsResponse.ok) {
-          const doctorsData = await doctorsResponse.json();
-          setDoctors(doctorsData);
-        }
-        
-        // Fetch services
-        const servicesResponse = await fetch('/api/services');
-        if (servicesResponse.ok) {
-          const servicesData = await servicesResponse.json();
-          setServices(servicesData);
-        }
-      } catch (error) {
-        console.error('Error fetching form data:', error);
-      }
-    };
-    
-    fetchData();
-  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -76,18 +42,17 @@ export default function AppointmentForm() {
     setErrorMessage('')
 
     try {
-      const response = await fetch('/api/appointments', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      // Имитация отправки формы
+      await new Promise(resolve => setTimeout(resolve, 1000))
       
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Ошибка при отправке формы');
-      }
+      // Сохраняем данные в localStorage для демонстрации
+      const appointments = JSON.parse(localStorage.getItem('appointments') || '[]')
+      appointments.push({
+        ...formData,
+        id: Date.now(),
+        createdAt: new Date().toISOString()
+      })
+      localStorage.setItem('appointments', JSON.stringify(appointments))
       
       setIsSubmitted(true)
       setFormData({
@@ -100,12 +65,8 @@ export default function AppointmentForm() {
         appointmentTime: '',
         notes: ''
       })
-    } catch (error) {
-      if (error instanceof Error) {
-        setErrorMessage(error.message || 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
-      } else {
-        setErrorMessage('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
-      }
+    } catch {
+      setErrorMessage('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.')
     } finally {
       setIsSubmitting(false)
     }
@@ -204,7 +165,7 @@ export default function AppointmentForm() {
             <option value="">Выберите услугу</option>
             {services.map((service) => (
               <option key={service.id} value={service.id}>
-                {service.name} - {service.price.toLocaleString('ru-RU')} ₽
+                {service.name} - {service.price}
               </option>
             ))}
           </select>

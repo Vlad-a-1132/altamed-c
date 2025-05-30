@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Настройки для Cloudflare Pages
-  output: 'standalone',
+  // Статический экспорт для Cloudflare Pages
+  output: 'export',
+  trailingSlash: true,
   
   // Настройки изображений
   images: {

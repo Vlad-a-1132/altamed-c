@@ -1,24 +1,22 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import prisma from '@/lib/db';
+import { doctors } from '@/data/static-data';
+
+export function generateStaticParams() {
+  return doctors.map((doctor) => ({
+    id: doctor.id.toString(),
+  }));
+}
 
 // Server component - can directly fetch from the database
-async function getDoctor(id: number) {
-  try {
-    const doctor = await prisma.doctor.findUnique({
-      where: { id },
-    });
-    return doctor;
-  } catch (error) {
-    console.error('Error fetching doctor:', error);
-    return null;
-  }
+function getDoctor(id: number) {
+  return doctors.find(doctor => doctor.id === id) || null;
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const doctor = await getDoctor(parseInt(id));
+  const doctor = getDoctor(parseInt(id));
   
   if (!doctor) {
     return {
@@ -35,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function DoctorPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const doctor = await getDoctor(parseInt(id));
+  const doctor = getDoctor(parseInt(id));
   
   if (!doctor) {
     notFound();
