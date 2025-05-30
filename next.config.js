@@ -1,28 +1,34 @@
+const path = require('path');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Статический экспорт только для продакшена
+  // Static export only for production
   ...(process.env.NODE_ENV === 'production' && {
     output: 'export',
     trailingSlash: true,
     distDir: 'out',
   }),
   
-  // Настройки изображений
+  // Image settings
   images: {
     unoptimized: true,
   },
   
-  // Настройки для оптимизации
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
+  // Webpack configuration for path aliases
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.resolve(__dirname, 'src'),
+    };
+    return config;
   },
   
-  // Поддержка TypeScript
+  // TypeScript support
   typescript: {
     ignoreBuildErrors: false,
   },
   
-  // ESLint настройки
+  // ESLint settings
   eslint: {
     ignoreDuringBuilds: false,
   },
