@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { articles } from '@/data/static-data';
+import { articles } from '../../../data/static-data';
 
 export function generateStaticParams() {
   return articles.map((article) => ({

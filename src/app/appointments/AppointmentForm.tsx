@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
-import { doctors, services } from '@/data/static-data'
+import { doctors, services } from '../../data/static-data'
 
 interface Doctor {
   id: number

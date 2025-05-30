@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { doctors } from '@/data/static-data';
+import { doctors } from '../../data/static-data';
 
 export const metadata = {
   title: 'Врачи | Альтамед-с',
