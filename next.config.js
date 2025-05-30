@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Настройки для Cloudflare Pages
+  output: 'standalone',
+  
   // Настройки изображений
   images: {
     unoptimized: true,
@@ -18,6 +21,11 @@ const nextConfig = {
   // ESLint настройки
   eslint: {
     ignoreDuringBuilds: false,
+  },
+  
+  // Экспериментальные функции для Cloudflare
+  experimental: {
+    runtime: 'nodejs',
   },
 }
 
