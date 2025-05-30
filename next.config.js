@@ -1,8 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Статический экспорт для Cloudflare Pages
-  output: 'export',
-  trailingSlash: true,
+  // Статический экспорт только для продакшена
+  ...(process.env.NODE_ENV === 'production' && {
+    output: 'export',
+    trailingSlash: true,
+  }),
   
   // Настройки изображений
   images: {
