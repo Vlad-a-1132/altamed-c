@@ -564,10 +564,10 @@ export default function Home() {
 
           <div className="flex flex-col lg:flex-row w-full justify-center gap-6">
             {/* Мобильная версия - блоки как на дизайне */}
-            <div className="md:hidden flex flex-col gap-6 w-full max-w-[370px] mx-auto px-4 pr-8">
-              {/* Блок Специалисты с изображением врача - w-370 h-125 */}
-              <div className="bg-gray-50 rounded-[20px] p-4 w-[360px] h-[125px] flex relative overflow-hidden">
-                <div className="flex flex-col justify-start pr-16">
+            <div className="md:hidden flex flex-col gap-6 w-full px-4">
+              {/* Блок Специалисты с изображением врача */}
+              <div className="bg-gray-50 rounded-[20px] p-4 h-[125px] flex relative overflow-hidden w-full">
+                <div className="flex flex-col justify-start flex-1 pr-4">
                   <span className="text-2xl font-bold mb-3">Специалисты</span>
                   <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
                     <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -575,13 +575,13 @@ export default function Home() {
                     </svg>
                   </div>
                 </div>
-                <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                  <div className="w-[130px] h-[130px] overflow-hidden rounded-lg">
+                <div className="absolute transform -translate-y-1/2" style={{ top: '58%', right: '2px' }}>
+                  <div className="w-[100px] h-[100px] overflow-hidden rounded-lg">
                     <Image
                       src="/images/doctors/doc.png"
                       alt="Доктор"
-                      width={130}
-                      height={130}
+                      width={100}
+                      height={100}
                       style={{ objectFit: "cover", width: "100%", height: "100%" }}
                       priority
                     />
@@ -589,9 +589,9 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Блоки Диагностика и Анализы в ряд - каждый w-177 h-125 */}
-              <div className="grid grid-cols-2 gap-14">
-                <div className="bg-gray-50 rounded-[20px] p-3 w-[164px] h-[125px] flex flex-col justify-between">
+              {/* Блоки Диагностика и Анализы в ряд */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-gray-50 rounded-[20px] p-3 h-[125px] flex flex-col justify-between w-full">
                   <span className="text-lg font-semibold">Диагностика</span>
                   <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center self-end">
                     <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -600,7 +600,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="bg-gray-50 rounded-[20px] p-3 w-[164px] h-[125px] flex flex-col justify-between">
+                <div className="bg-gray-50 rounded-[20px] p-3 h-[125px] flex flex-col justify-between w-full">
                   <span className="text-lg font-semibold">Анализы</span>
                   <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center self-end">
                     <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -610,9 +610,9 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Блоки Заболевания и Симптомы в ряд - каждый w-177 h-125 */}
-              <div className="grid grid-cols-2 gap-14">
-                <div className="bg-gray-50 rounded-[20px] p-3 w-[164px] h-[125px] flex flex-col justify-between">
+              {/* Блоки Заболевания и Симптомы в ряд */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-gray-50 rounded-[20px] p-3 h-[125px] flex flex-col justify-between w-full">
                   <span className="text-lg font-semibold">Заболевания</span>
                   <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center self-end">
                     <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -621,7 +621,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="bg-gray-50 rounded-[20px] p-3 w-[164px] h-[125px] flex flex-col justify-between">
+                <div className="bg-gray-50 rounded-[20px] p-3 h-[125px] flex flex-col justify-between w-full">
                   <span className="text-lg font-semibold">Симптомы</span>
                   <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center self-end">
                     <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -633,7 +633,7 @@ export default function Home() {
             </div>
 
             {/* Мобильная карта */}
-            <div className="md:hidden w-full mx-auto px-4 mt-6">
+            <div className="md:hidden w-full px-4 mt-6">
               <div className="w-full h-[250px] rounded-[20px] overflow-hidden mb-4 relative">
                 <div ref={mobileMapRef} className="w-full h-full">
                   {/* Fallback content while map is loading */}
