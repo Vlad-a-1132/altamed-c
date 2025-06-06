@@ -4,42 +4,259 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 
-export default function Home() {
+export default function DentistryPage() {
   // State for tracking current slide
   const [currentSlide, setCurrentSlide] = useState(0);
   // State for tracking current promotion slide (mobile)
   const [currentPromoSlide, setCurrentPromoSlide] = useState(0);
+  // State for tracking active service category
+  const [activeCategory, setActiveCategory] = useState(0);
   
   // Ref for doctors slider
   const doctorsSliderRef = useRef<HTMLDivElement>(null);
   
-  // Slides data
+  // Services data with categories
+  const servicesData = [
+    {
+      title: "Лечение зубов",
+      services: [
+        { name: "Консультация стоматолога", price: "От 1 500 руб." },
+        { name: "Пломбирование зубов", price: "От 5 000 руб." },
+        { name: "Лечение кариеса", price: "От 5 000 руб." },
+        { name: "Лечение острой зубной боли", price: "От 10 000 руб." },
+        { name: "Лечение пульпита", price: "От 5 200 руб." },
+        { name: "Лечение периодонтита", price: "От 10 000 руб." },
+        { name: "Лечение корневых каналов", price: "От 10 000 руб." },
+        { name: "Лечение зубов под микроскопом", price: "От 3 000 руб." },
+        { name: "Лечение кариеса системой ICON", price: "От 5 000 руб." },
+        { name: "Лечение передних зубов", price: "От 7 950 руб." },
+        { name: "Лечение пульпита трехканального зуба", price: "От 20 000 руб." },
+        { name: "Удаление нерва зуба", price: "От 6 880 руб." }
+      ]
+    },
+    {
+      title: "Профессиональная гигиена",
+      services: [
+        { name: "Профессиональная чистка зубов", price: "От 6 860 руб." },
+        { name: "Чистка зубов Air Flow", price: "От 3 000 руб." },
+        { name: "Удаление зубного камня", price: "От 230 руб." },
+        { name: "Ультразвуковая чистка зубов", price: "От 230 руб." },
+        { name: "Фторирование зубов", price: "Уточнить цену" }
+      ]
+    },
+    {
+      title: "Эстетическая стоматология",
+      services: [
+        { name: "Отбеливание зубов системой Zoom 4", price: "От 38 000 руб." },
+        { name: "Удаление зубного налета", price: "От 1 700 руб." },
+        { name: "Реставрация зубов", price: "От 6 800 руб." },
+        { name: "Моделирование улыбки", price: "От 18 000 руб." },
+        { name: "Керамические виниры", price: "От 37 500 руб." },
+        { name: "Композитная реставрация зубов", price: "От 12 000 руб." },
+        { name: "Композитные виниры", price: "От 8 700 руб." },
+        { name: "Накладки на зубы", price: "От 1 500 руб." },
+        { name: "Наращивание зубов", price: "От 2 000 руб." },
+        { name: "Реставрация передних зубов", price: "От 4 550 руб." },
+        { name: "Художественная реставрация зубов", price: "От 7 950 руб." }
+      ]
+    },
+    {
+      title: "Пародонтология",
+      services: [
+        { name: "Консультация стоматолога-пародонтолога", price: "От 2 000 руб." },
+        { name: "Компьютерная диагностика состояния пародонта", price: "От 1 600 руб." },
+        { name: "Лазерное лечение заболеваний пародонта", price: "От 750 руб." },
+        { name: "Вектор терапия", price: "От 700 руб." },
+        { name: "Лоскутные операции", price: "От 4 500 руб." },
+        { name: "Закрытие рецессии десны", price: "От 10 000 руб." },
+        { name: "Кюретаж десен", price: "От 900 руб." },
+        { name: "Лечение пародонтоза", price: "От 1 500 руб." },
+        { name: "Пластика десны", price: "От 1 500 руб." },
+        { name: "Шинирование зубов", price: "От 3 000 руб." }
+      ]
+    },
+    {
+      title: "Хирургическая стоматология",
+      services: [
+        { name: "Консультация стоматолога-хирурга", price: "От 2 000 руб." },
+        { name: "Удаление зубов мудрости", price: "От 10 000 руб." },
+        { name: "Удаление зубов", price: "От 2 500 руб." },
+        { name: "Удаление новообразований", price: "От 5 000 руб." },
+        { name: "Удаление кисты зуба", price: "От 4 560 руб." },
+        { name: "Пластика уздечки губ", price: "От 6 000 руб." },
+        { name: "Пластика уздечки языка", price: "От 6 000 руб." },
+        { name: "Ампутация корня зуба", price: "От 15 000 руб." },
+        { name: "Вестибулопластика", price: "От 14 000 руб." },
+        { name: "Гемисекция зуба", price: "От 3 500 руб." },
+        { name: "Резекция верхушки корня зуба", price: "От 15 000 руб." },
+        { name: "Ретроградное пломбирование корневых каналов", price: "От 5 000 руб." },
+        { name: "Сложное удаление зуба", price: "От 10 000 руб." },
+        { name: "Удаление верхнего зуба мудрости", price: "От 8 000 руб." },
+        { name: "Удаление дистопированного зуба", price: "От 8 000 руб." },
+        { name: "Удаление импланта зуба", price: "От 30 000 руб." },
+        { name: "Удаление капюшона зуба", price: "От 11 500 руб." },
+        { name: "Удаление нижнего зуба мудрости", price: "От 8 000 руб." },
+        { name: "Цистэктомия", price: "От 17 000 руб." }
+      ]
+    },
+    {
+      title: "Имплантация зубов",
+      services: [
+        { name: "Консультация стоматолога-имплантолога", price: "От 2 000 руб." },
+        { name: "Одноэтапная имплантация зубов", price: "От 55 000 руб." },
+        { name: "Двухэтапная (классическая) имплантация зубов", price: "От 55 000 руб." },
+        { name: "Имплантация зубов за один день", price: "От 55 000 руб." },
+        { name: "Одномоментная имплантация зубов", price: "От 55 000 руб." },
+        { name: "Экспресс-имплантация зубов", price: "От 55 000 руб." },
+        { name: "Имплантация передних зубов", price: "От 55 000 руб." },
+        { name: "Имплантация жевательных зубов", price: "От 55 000 руб." },
+        { name: "Имплантация нижних зубов", price: "От 55 000 руб." },
+        { name: "Имплантация верхних зубов", price: "От 55 000 руб." },
+        { name: "Полная имплантация зубов", price: "От 55 000 руб." },
+        { name: "Имплантация зубов под ключ", price: "От 55 000 руб." },
+        { name: "Имплантация одного зуба", price: "От 55 000 руб." },
+        { name: "Имплантация зубов ALL-ON-4", price: "От 55 000 руб." },
+        { name: "Имплантация зубов ALL-ON-6", price: "От 55 000 руб." },
+        { name: "Костная пластика", price: "От 30 000 руб." },
+        { name: "Синус-лифтинг", price: "От 35 000 руб." },
+        { name: "Импланты Dentium", price: "От 55 000 руб." },
+        { name: "Импланты Straumann", price: "От 72 400 руб." },
+        { name: "Импланты Astra Tech", price: "От 69 900 руб." }
+      ]
+    },
+    {
+      title: "Протезирование зубов",
+      services: [
+        { name: "Бюгельные протезы", price: "От 48 000 руб." },
+        { name: "Консультация стоматолога ортопеда", price: "От 2 000 руб." },
+        { name: "Пластиночные протезы", price: "От 34 500 руб." },
+        { name: "Покрывные протезы", price: "От 160 000 руб." },
+        { name: "Протезы акри-фри", price: "От 40 000 руб." },
+        { name: "Акриловые протезы", price: "От 30 000 руб." },
+        { name: "Нейлоновые протезы", price: "От 60 000 руб." },
+        { name: "Протезирование на имплантах", price: "От 160 000 руб." },
+        { name: "Безметалловые коронки", price: "От 28 000 руб." },
+        { name: "Керамические коронки", price: "От 28 500 руб." },
+        { name: "Коронки E-Max", price: "От 32 000 руб." },
+        { name: "Металлические коронки", price: "От 7 800 руб." },
+        { name: "Металлопластиковые коронки", price: "От 10 000 руб." },
+        { name: "Пластмассовые коронки", price: "От 1 800 руб." },
+        { name: "Установка коронки на зуб", price: "От 1 800 руб." },
+        { name: "Цельнолитые коронки", price: "От 7 800 руб." },
+        { name: "Циркониевые коронки", price: "От 28 700 руб." },
+        { name: "Бюгельные протезы на аттачменах (замках)", price: "От 98 000 руб." },
+        { name: "Бюгельные протезы на кламмерах", price: "От 45 600 руб." },
+        { name: "Восстановительные вкладки", price: "От 25 000 руб." },
+        { name: "Восстановление зубов вкладками", price: "От 20 000 руб." },
+        { name: "Временные коронки", price: "От 1 800 руб." },
+        { name: "Зубной протез «бабочка»", price: "От 10 000 руб." },
+        { name: "Композитные коронки", price: "От 9 000 руб." },
+        { name: "Культевые вкладки", price: "От 8 500 руб." },
+        { name: "Металлокерамические коронки", price: "От 18 600 руб." },
+        { name: "Мостовидные протезы", price: "От 1 800 руб." },
+        { name: "Протезирование передних зубов", price: "От 1 300 руб." }
+      ]
+    },
+    {
+      title: "Исправление прикуса",
+      services: [
+        { name: "Консультация стоматолога-ортодонта", price: "От 1 500 руб." },
+        { name: "Вестибулярные многопетлевые брекеты", price: "От 24 600 руб." },
+        { name: "Лигатурные брекеты", price: "От 70 000 руб." },
+        { name: "Металлические брекеты", price: "От 350 000 руб." },
+        { name: "Ортодонтические микроимпланты", price: "От 12 500 руб." },
+        { name: "Самолигирующие брекеты", price: "От 300 000 руб." },
+        { name: "3D-технологии в ортодонтии", price: "От 16 000 руб." },
+        { name: "Установка брекетов", price: "От 29 000 руб." },
+        { name: "Безлигатурные брекеты", price: "От 7 100 руб." },
+        { name: "Брекеты Damon", price: "От 350 000 руб." },
+        { name: "Брекеты взрослым", price: "От 29 100 руб." },
+        { name: "Брекеты на одну челюсть", price: "От 22 770 руб." },
+        { name: "Брекеты под ключ", price: "От 7 100 руб." },
+        { name: "Выравнивание зубов", price: "От 31 000 руб." },
+        { name: "Капы 3D Smile", price: "От 100 000 руб." },
+        { name: "Керамические брекеты", price: "От 32 400 руб." },
+        { name: "Снятие брекетов", price: "От 24 600 руб." },
+        { name: "Установка ретейнеров", price: "От 500 руб." }
+      ]
+    },
+    {
+      title: "Детская стоматология",
+      services: [
+        { name: "Лечение зубов ребенка под общим наркозом", price: "От 23 000 руб." },
+        { name: "Консультация детского ортодонта", price: "От 1 500 руб." },
+        { name: "Лечение молочных зубов у детей", price: "От 5 000 руб." },
+        { name: "Удаление зубов у детей", price: "От 2 500 руб." },
+        { name: "Герметизация фиссур", price: "От 2 900 руб." },
+        { name: "Профессиональная чистка зубов детям", price: "От 3 640 руб." },
+        { name: "Фторирование зубов у детей", price: "От 1 730 руб." },
+        { name: "Исправление прикуса у детей", price: "От 1 500 руб." },
+        { name: "Коронки на детские зубы", price: "От 6 000 руб." },
+        { name: "Лечение стоматита у детей", price: "От 1 500 руб." },
+        { name: "Пластика уздечки у детей", price: "От 6 000 руб." },
+        { name: "Аппарат Хааса", price: "От 33 000 руб." },
+        { name: "Лечение кариеса у детей", price: "От 5 000 руб." },
+        { name: "Пластины для выравнивания зубов ребенка", price: "От 23 000 руб." },
+        { name: "Установка брекетов детям", price: "От 121 500 руб." },
+        { name: "Лечение пульпита у детей", price: "От 7 900 руб." },
+        { name: "Лечение периодонтита у детей", price: "От 7 900 руб." },
+        { name: "Пломбирование зубов у детей", price: "От 5 000 руб." },
+        { name: "Лечение зубов под седацией у детей", price: "От 4 500 руб." }
+      ]
+    },
+    {
+      title: "Лечение без боли",
+      services: [
+        { name: "Лечение зубов под общим наркозом", price: "От 23 000 руб." },
+        { name: "Лечение зубов ребенка под общим наркозом", price: "От 23 000 руб." },
+        { name: "Удаление зубов под наркозом", price: "От 12 000 руб." },
+        { name: "Удаление зубов мудрости под наркозом", price: "От 12 000 руб." },
+        { name: "Лечение зубов под седацией", price: "От 4 500 руб." },
+        { name: "Лечение зубов под седацией взрослым", price: "От 4 500 руб." },
+        { name: "Лечение зубов под седацией у детей", price: "От 4 500 руб." },
+        { name: "Лечение зубов с анестезией", price: "От 7 600 руб." }
+      ]
+    },
+    {
+      title: "Диагностика",
+      services: [
+        { name: "Профилактический осмотр стоматолога", price: "От 1 500 руб." },
+        { name: "Рентген зубов", price: "От 1 300 руб." },
+        { name: "Прицельный снимок", price: "От 1 300 руб." },
+        { name: "Панорамный снимок зубов (Ортопантомограмма, ОПТГ)", price: "От 2 200 руб." },
+        { name: "Дентальная компьютерная томография (КТ)", price: "От 1 950 руб." },
+        { name: "Диагностика окклюзии", price: "От 7 500 руб." }
+      ]
+    }
+  ];
+
+  // Slides data for dentistry
   const slides = [
     {
-      title: "Для взрослых и детей",
-      buttonText: "Найти врача",
-      buttonLink: "/doctors",
+      title: "Современная стоматология",
+      buttonText: "Записаться",
+      buttonLink: "/appointments",
       buttonColor: "#13AB7B",
       image: "/images/baner/banner.webp"
     },
     {
-      title: "КТ диагностика",
-      buttonText: "Записаться на КТ",
-      buttonLink: "/services/ct-scan",
+      title: "Безболезненное лечение",
+      buttonText: "Узнать больше",
+      buttonLink: "/services/dentistry/painless",
       buttonColor: "#10B981",
       image: "/images/baner/PROMOKT2.png"
     },
     {
-      title: "Семейная медицина",
-      buttonText: "Наши услуги",
-      buttonLink: "/services",
+      title: "Имплантация зубов",
+      buttonText: "Консультация",
+      buttonLink: "/services/dentistry/implants",
       buttonColor: "#3B82F6",
       image: "/images/baner/banner2.webp"
     },
     {
-      title: "Диагностика и лечение",
+      title: "Эстетическая стоматология",
       buttonText: "Записаться",
-      buttonLink: "/appointments",
+      buttonLink: "/services/dentistry/aesthetic",
       buttonColor: "#EF4444",
       image: "/images/baner/PROMOKT2.png"
     }
@@ -62,7 +279,7 @@ export default function Home() {
 
   // Functions for promotion slider
   const nextPromoSlide = () => {
-    setCurrentPromoSlide((prev) => (prev === 2 ? 0 : prev + 1)); // 3 slides total
+    setCurrentPromoSlide((prev) => (prev === 2 ? 0 : prev + 1));
   };
 
   const prevPromoSlide = () => {
@@ -72,29 +289,6 @@ export default function Home() {
   const goToPromoSlide = (index: number) => {
     setCurrentPromoSlide(index);
   };
-  
-  // Массив услуг для правой колонки
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const services = [
-    { title: "Хирургия", link: "/services/surgery" },
-    { title: "Детский терапевт", link: "/services/pediatric-therapist" },
-    { title: "Стоматология", link: "/services/dentistry" },
-    { title: "Диагностика", link: "/services/diagnostics" },
-    { title: "Рентгенология", link: "/services/radiology" },
-    { title: "УЗИ", link: "/services/ultrasound" },
-    { title: "Педиатрия", link: "/services/pediatrics" },
-    { title: "Отоларингология", link: "/services/otolaryngology" },
-    { title: "Гинекология", link: "/services/gynecology" },
-  ];
-
-  // Интересы для нижней секции
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const interests = [
-    { title: "Специалисты", icon: "👨‍⚕️", link: "/doctors" },
-    { title: "Анализы", icon: "🧪", link: "/analyses" },
-    { title: "Заболевания", icon: "🩺", link: "/diseases" },
-    { title: "Симптомы", icon: "🤒", link: "/symptoms" },
-  ];
 
   // Автоматическое переключение слайдов
   useEffect(() => {
@@ -127,7 +321,6 @@ export default function Home() {
 
   // CSS for hiding scrollbars
   useEffect(() => {
-    // Add CSS to head to hide scrollbars globally on the slider
     const style = document.createElement('style');
     style.textContent = `
       .scrollbar-hide::-webkit-scrollbar {
@@ -152,28 +345,27 @@ export default function Home() {
         <div className="mx-auto px-4" style={{ maxWidth: '83rem' }}>
           <div className="mb-6 ml-0 md:ml-4 lg:ml-8">
             <h1 className="text-2xl md:text-3xl font-bold text-black leading-tight px-4 md:px-0">
-              Сеть медицинских центров «<span className="italic">Альтамед-с</span>»
+              Стоматология «<span className="italic">Альтамед-с</span>»
             </h1>
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 md:gap-8 justify-center mx-auto px-4 md:px-0">
-            {/* Левая колонка с семейной картинкой и блоком для взрослых и детей - теперь слайдер */}
+            {/* Левая колонка с слайдером */}
             <div className="w-full md:w-[548px] h-[300px] md:h-[445px] flex flex-col rounded-[20px] overflow-hidden shadow-md flex-shrink-0 mx-auto md:mx-0">
               {/* Слайдер */}
               <div className="h-[220px] md:h-[358px] bg-emerald-500 relative overflow-hidden">
-                {/* Контент для текущего слайда остается тем же */}
                 <div className="w-full h-full relative">
-        <Image
+                  <Image
                     src={slides[currentSlide].image}
                     alt={slides[currentSlide].title}
                     fill
                     className=""
                     unoptimized
-          priority
-        />
+                    priority
+                  />
                 </div>
                 
-                {/* Навигационные стрелки - скрываем на мобильных */}
+                {/* Навигационные стрелки */}
                 <button 
                   onClick={prevSlide} 
                   className="hidden md:block absolute left-3 top-1/2 transform -translate-y-1/2 bg-white/70 rounded-full p-2 shadow-md hover:bg-white"
@@ -191,7 +383,7 @@ export default function Home() {
                   </svg>
                 </button>
                 
-                {/* Прогресс-бар в виде точек */}
+                {/* Прогресс-бар */}
                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
                   {slides.map((_, index) => (
                     <button
@@ -205,7 +397,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Нижняя часть - белый блок с текстом и кнопкой, меняется в зависимости от текущего слайда */}
+              {/* Нижняя часть */}
               <div className="bg-white p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-0">
                 <div className="text-black font-medium text-sm md:text-base">{slides[currentSlide].title}</div>
                 <Link 
@@ -221,88 +413,88 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Правая колонка с услугами */}
-            {/* Мобильная версия - цветные блоки 2x6 */}
+            {/* Правая колонка с услугами стоматологии */}
+            {/* Мобильная версия */}
             <div className="md:hidden grid grid-cols-2 gap-3 w-full max-w-sm mx-auto">
-              <Link href="/services/surgery" className="bg-[#E8F4FD] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
-                <span className="font-medium text-sm text-gray-800">Центры хирургии</span>
+              <Link href="/services/dentistry/expert-opinion" className="bg-[#E8F4FD] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
+                <span className="font-medium text-sm text-gray-800">Экспертное мнение врача</span>
                 <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
               
-              <Link href="/services/pediatric" className="bg-[#FFE8E1] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
-                <span className="font-medium text-sm text-gray-800">Детские клиники</span>
+              <Link href="/services/dentistry/treatment" className="bg-[#FFE8E1] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
+                <span className="font-medium text-sm text-gray-800">Лечение зубов</span>
                 <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
               
-              <Link href="/services/dentistry" className="bg-[#E8F5E8] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
-                <span className="font-medium text-sm text-gray-800">Стоматология</span>
+              <Link href="/services/dentistry/hygiene" className="bg-[#E8F5E8] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
+                <span className="font-medium text-sm text-gray-800">Профессиональная гигиена</span>
                 <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
               
-              <Link href="/services/eco" className="bg-[#FFF8E1] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
-                <span className="font-medium text-sm text-gray-800">ЭКО</span>
+              <Link href="/services/dentistry/aesthetic" className="bg-[#FFF8E1] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
+                <span className="font-medium text-sm text-gray-800">Эстетическая стоматология</span>
                 <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
               
-              <Link href="/services/oncology" className="bg-[#E8F4FD] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
-                <span className="font-medium text-sm text-gray-800">Онкология</span>
+              <Link href="/services/dentistry/periodontics" className="bg-[#E8F4FD] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
+                <span className="font-medium text-sm text-gray-800">Пародонтология</span>
                 <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
               
-              <Link href="/services/emergency" className="bg-[#FFE8F0] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
-                <span className="font-medium text-sm text-gray-800">Скорая помощь</span>
+              <Link href="/services/dentistry/surgery" className="bg-[#FFE8F0] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
+                <span className="font-medium text-sm text-gray-800">Хирургическая стоматология</span>
                 <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
               
-              <Link href="/services/cosmetology" className="bg-[#FFE8E1] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
-                <span className="font-medium text-sm text-gray-800">Косметология</span>
+              <Link href="/services/dentistry/implants" className="bg-[#FFE8E1] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
+                <span className="font-medium text-sm text-gray-800">Имплантация зубов</span>
                 <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
               
-              <Link href="/services/plastic" className="bg-[#F0E8FF] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
-                <span className="font-medium text-sm text-gray-800">Пластика</span>
+              <Link href="/services/dentistry/prosthetics" className="bg-[#F0E8FF] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
+                <span className="font-medium text-sm text-gray-800">Протезирование зубов</span>
                 <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
 
-              <Link href="/services/diagnostics" className="bg-[#F2F6D6] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
+              <Link href="/services/dentistry/orthodontics" className="bg-[#F2F6D6] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
+                <span className="font-medium text-sm text-gray-800">Исправление прикуса</span>
+                <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+
+              <Link href="/services/dentistry/pediatric" className="bg-[#E2F5F0] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
+                <span className="font-medium text-sm text-gray-800">Детская стоматология</span>
+                <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+
+              <Link href="/services/dentistry/painless" className="bg-[#EEE0EE] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
+                <span className="font-medium text-sm text-gray-800">Лечение без боли</span>
+                <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+
+              <Link href="/services/dentistry/diagnostics" className="bg-[#DFDBF0] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
                 <span className="font-medium text-sm text-gray-800">Диагностика</span>
-                <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-
-              <Link href="/services/ultrasound" className="bg-[#E2F5F0] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
-                <span className="font-medium text-sm text-gray-800">УЗИ</span>
-                <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-
-              <Link href="/services/otolaryngology" className="bg-[#EEE0EE] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
-                <span className="font-medium text-sm text-gray-800">Отоларингология</span>
-                <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-
-              <Link href="/services/ct" className="bg-[#DFDBF0] p-3 rounded-[20px] flex items-center justify-between h-[80px]">
-                <span className="font-medium text-sm text-gray-800">КТ</span>
                 <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
@@ -312,35 +504,35 @@ export default function Home() {
             {/* Кнопка "Все услуги" для мобильной версии */}
             <div className="md:hidden mt-4 flex justify-center w-full max-w-sm mx-auto">
               <Link 
-                href="/services" 
+                href="/services/dentistry" 
                 className="bg-emerald-500 text-white rounded-full px-8 py-3 flex items-center justify-center font-medium text-sm hover:bg-emerald-600 transition-colors w-full"
               >
-                Все услуги
+                Все услуги стоматологии
                 <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
             </div>
 
-            {/* Десктопная версия - оригинальные серые блоки */}
+            {/* Десктопная версия */}
             <div className="hidden md:flex flex-col space-y-4 md:space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-                <Link href="/services/surgery" className="bg-[#EDF8F4] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
-                  <span className="font-medium text-sm md:text-base">Педиатрия</span>
+                <Link href="/services/dentistry/expert-opinion" className="bg-[#EDF8F4] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
+                  <span className="font-medium text-sm md:text-base">Экспертное мнение врача</span>
                   <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
                 
-                <Link href="/services/pediatric-therapist" className="bg-[#FFDCC7] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
-                  <span className="font-medium text-sm md:text-base">Детский терапевт</span>
+                <Link href="/services/dentistry/treatment" className="bg-[#FFDCC7] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
+                  <span className="font-medium text-sm md:text-base">Лечение зубов</span>
                   <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
                 
-                <Link href="/services/dentistry" className="bg-[#F6F8F7] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
-                  <span className="font-medium text-sm md:text-base">Стоматология</span>
+                <Link href="/services/dentistry/hygiene" className="bg-[#F6F8F7] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
+                  <span className="font-medium text-sm md:text-base">Профессиональная гигиена</span>
                   <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -348,93 +540,92 @@ export default function Home() {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-                <Link href="/services/diagnostics" className="bg-[#F2F6D6] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
+                <Link href="/services/dentistry/aesthetic" className="bg-[#F2F6D6] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
+                  <span className="font-medium text-sm md:text-base">Эстетическая стоматология</span>
+                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+                
+                <Link href="/services/dentistry/periodontics" className="bg-[#E2F5F0] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
+                  <span className="font-medium text-sm md:text-base">Пародонтология</span>
+                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+                
+                <Link href="/services/dentistry/surgery" className="bg-[#FDE3E2] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
+                  <span className="font-medium text-sm md:text-base">Хирургическая стоматология</span>
+                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                <Link href="/services/dentistry/implants" className="bg-[#EBD8C9] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
+                  <span className="font-medium text-sm md:text-base">Имплантация зубов</span>
+                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+                
+                <Link href="/services/dentistry/prosthetics" className="bg-[#EEE0EE] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
+                  <span className="font-medium text-sm md:text-base">Протезирование зубов</span>
+                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+                
+                <Link href="/services/dentistry/orthodontics" className="bg-[#DBF0E9] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
+                  <span className="font-medium text-sm md:text-base">Исправление прикуса</span>
+                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                <Link href="/services/dentistry/pediatric" className="bg-[#DBF0E1] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
+                  <span className="font-medium text-sm md:text-base">Детская стоматология</span>
+                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+                
+                <Link href="/services/dentistry/painless" className="bg-[#DBE5F0] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
+                  <span className="font-medium text-sm md:text-base">Лечение без боли</span>
+                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+                
+                <Link href="/services/dentistry/diagnostics" className="bg-[#DFDBF0] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
                   <span className="font-medium text-sm md:text-base">Диагностика</span>
                   <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
-                
-                <Link href="/services/radiology" className="bg-[#E2F5F0] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
-                  <span className="font-medium text-sm md:text-base">Рентгенология</span>
-                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
-                
-                <Link href="/services/ultrasound" className="bg-[#FDE3E2] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
-                  <span className="font-medium text-sm md:text-base">УЗИ</span>
-                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-                <Link href="/services/pediatrics" className="bg-[#EBD8C9] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
-                  <span className="font-medium text-sm md:text-base">Педиатрия</span>
-                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
-                
-                <Link href="/services/otolaryngology" className="bg-[#EEE0EE] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
-                  <span className="font-medium text-sm md:text-base">Отоларингология</span>
-                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
-                
-                <Link href="/services/home-services" className="bg-[#DBF0E9] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
-                  <span className="font-medium text-sm md:text-base">Гинекология</span>
-                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-                <Link href="/services/pediatrics" className="bg-[#DBF0E1] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
-                  <span className="font-medium text-sm md:text-base">Педиатрия</span>
-                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
-                
-                <Link href="/services/otolaryngology" className="bg-[#DBE5F0] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
-                  <span className="font-medium text-sm md:text-base">Отоларингология</span>
-                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
-                
-                <Link href="/services/home-services" className="bg-[#DFDBF0] p-4 rounded-[20px] flex items-center justify-between w-full md:w-[224px] h-[89px]">
-                  <span className="font-medium text-sm md:text-base">КТ</span>
-                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
-              </div>
-              
-              {/* Кнопка "Все услуги" для десктопа */}
+              {/* Кнопка "Все услуги стоматологии" для десктопа */}
               <div className="flex justify-center">
                 <Link 
-                  href="/services" 
+                  href="/services/dentistry" 
                   className="bg-emerald-500 text-white rounded-full py-3 flex items-center justify-center font-medium text-sm hover:bg-emerald-600 transition-colors"
                   style={{ paddingLeft: '8rem', paddingRight: '8rem' }}
                 >
-                  Все услуги
+                  Все услуги стоматологии
                   <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
               </div>
-             
             </div>
           </div>
         </div>
       </section>
 
-      {/* Что Вас интересует с картой */}
       <section className="pt-0 pb-4">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl flex flex-col">
           <h2 className="text-2xl md:text-3xl font-bold text-black mb-6 text-center md:text-left">
@@ -448,6 +639,7 @@ export default function Home() {
               <div className="bg-gray-50 rounded-[20px] p-4 h-[125px] flex relative overflow-hidden w-full">
                 <div className="flex flex-col justify-start flex-1 pr-4">
                   <span className="text-2xl font-bold mb-3">Специалисты</span>
+                  <span className="text-sm text-gray-600 mb-2">Опытные стоматологи всех направлений</span>
                   <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
                     <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -471,7 +663,10 @@ export default function Home() {
               {/* Блоки Диагностика и Анализы в ряд */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 rounded-[20px] p-3 h-[125px] flex flex-col justify-between w-full">
-                  <span className="text-lg font-semibold">Диагностика</span>
+                  <div>
+                    <span className="text-lg font-semibold">Диагностика</span>
+                    <p className="text-xs text-gray-600 mt-1">Рентген, КТ, 3D-диагностика</p>
+                  </div>
                   <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center self-end">
                     <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -480,7 +675,10 @@ export default function Home() {
                 </div>
 
                 <div className="bg-gray-50 rounded-[20px] p-3 h-[125px] flex flex-col justify-between w-full">
-                  <span className="text-lg font-semibold">Анализы</span>
+                  <div>
+                    <span className="text-lg font-semibold">Анализы</span>
+                    <p className="text-xs text-gray-600 mt-1">Анализы перед лечением</p>
+                  </div>
                   <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center self-end">
                     <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -492,7 +690,10 @@ export default function Home() {
               {/* Блоки Заболевания и Симптомы в ряд */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 rounded-[20px] p-3 h-[125px] flex flex-col justify-between w-full">
-                  <span className="text-lg font-semibold">Заболевания</span>
+                  <div>
+                    <span className="text-lg font-semibold">Заболевания</span>
+                    <p className="text-xs text-gray-600 mt-1">Болезни зубов и десен</p>
+                  </div>
                   <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center self-end">
                     <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -501,7 +702,10 @@ export default function Home() {
                 </div>
 
                 <div className="bg-gray-50 rounded-[20px] p-3 h-[125px] flex flex-col justify-between w-full">
-                  <span className="text-lg font-semibold">Симптомы</span>
+                  <div>
+                    <span className="text-lg font-semibold">Симптомы</span>
+                    <p className="text-xs text-gray-600 mt-1">Боль, кровоточивость, отеки</p>
+                  </div>
                   <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center self-end">
                     <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -543,7 +747,7 @@ export default function Home() {
                 <div className="flex flex-col max-w-[60%] z-10">
                     <div className="text-lg md:text-xl font-semibold mb-2">Специалисты</div>
                     <p className="text-gray-600 text-sm md:text-base">
-                    Найдите подходящего врача в нашей клинике
+                    Опытные стоматологи всех направлений
                     <span className="inline-flex items-center justify-center w-6 h-6 bg-emerald-500 rounded-full ml-2">
                       <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -567,7 +771,7 @@ export default function Home() {
                 <div className="flex flex-col md:flex-row gap-4">
                   <div className="bg-gray-50 rounded-[20px] p-4 w-full md:w-[279px] h-[116px] relative">
                     <div className="text-lg md:text-xl font-semibold mb-2">Диагностика</div>
-                    <p className="text-gray-600 text-sm md:text-base">Современное оборудование</p>
+                    <p className="text-gray-600 text-sm md:text-base">Рентген, КТ, 3D-диагностика</p>
                   <div className="absolute right-4 bottom-4">
                     <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
                       <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -579,7 +783,7 @@ export default function Home() {
                 
                   <div className="bg-gray-50 rounded-[20px] p-4 w-full md:w-[279px] h-[116px] relative">
                     <div className="text-lg md:text-xl font-semibold mb-2">Анализы</div>
-                    <p className="text-gray-600 text-sm md:text-base">Быстро и точно</p>
+                    <p className="text-gray-600 text-sm md:text-base">Анализы перед лечением</p>
                   <div className="absolute right-4 bottom-4">
                     <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
                       <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -594,7 +798,7 @@ export default function Home() {
                 <div className="flex flex-col md:flex-row gap-4">
                   <div className="bg-gray-50 rounded-[20px] p-4 w-full md:w-[279px] h-[116px] relative">
                     <div className="text-lg md:text-xl font-semibold mb-2">Заболевания</div>
-                    <p className="text-gray-600 text-sm md:text-base">Информация и лечение</p>
+                    <p className="text-gray-600 text-sm md:text-base">Болезни зубов и десен</p>
                   <div className="absolute right-4 bottom-4">
                     <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
                       <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -606,7 +810,7 @@ export default function Home() {
                 
                   <div className="bg-gray-50 rounded-[20px] p-4 w-full md:w-[279px] h-[116px] relative">
                     <div className="text-lg md:text-xl font-semibold mb-2">Симптомы</div>
-                    <p className="text-gray-600 text-sm md:text-base">Правильная диагностика</p>
+                    <p className="text-gray-600 text-sm md:text-base">Боль, кровоточивость, отеки</p>
                   <div className="absolute right-4 bottom-4">
                     <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
                       <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -617,28 +821,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Статистика - добавляем под блоками интересов */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6 mx-auto w-full place-items-center justify-center">
-                  <div className="bg-gray-50 p-4 rounded-[20px] w-full md:w-[271px] h-[116px] overflow-hidden">
-                    <div className="text-2xl md:text-3xl font-bold text-black mb-1 overflow-hidden text-ellipsis">135 000+</div>
-                  <div className="text-gray-600 text-sm overflow-hidden text-ellipsis">пациентов в год</div>
-                </div>
-                
-                  <div className="bg-gray-50 p-4 rounded-[20px] w-full md:w-[271px] h-[116px] overflow-hidden">
-                    <div className="text-2xl md:text-3xl font-bold text-black mb-1 overflow-hidden text-ellipsis">50+</div>
-                  <div className="text-gray-600 text-sm overflow-hidden text-ellipsis">квалифицированных врачей</div>
-                </div>
-                
-                  <div className="bg-gray-50 p-4 rounded-[20px] w-full md:w-[271px] h-[116px] overflow-hidden">
-                    <div className="text-2xl md:text-3xl font-bold text-black mb-1 overflow-hidden text-ellipsis">несколько</div>
-                  <div className="text-gray-600 text-sm overflow-hidden text-ellipsis">клиник для взрослых и детей</div>
-                </div>
-                
-                  <div className="bg-gray-50 p-4 rounded-[20px] w-full md:w-[271px] h-[116px] overflow-hidden">
-                    <div className="text-2xl md:text-3xl font-medium text-black mb-1 overflow-hidden text-ellipsis">Работаем с 1997</div>
-                  <div className="text-gray-600 text-sm overflow-hidden text-ellipsis">Индивидуальный подход к каждому посетителю</div>
-                </div>
-              </div>
+         
             </div>
 
             {/* Правая колонка */}
@@ -654,424 +837,252 @@ export default function Home() {
                   ></iframe>
                 </div>
 
-              {/* Контейнер для блока приложения */}
-              <div className="flex" style={{ overflow: 'visible' }}>
-                {/* Блок с приложением */}
-                  <div className="bg-[#ebf7f4] p-4 md:p-6 rounded-[20px] h-auto md:h-[252px] w-full flex flex-col" style={{ overflow: 'visible' }}>
-                    <div className="flex flex-col md:flex-row items-start justify-between" style={{ overflow: 'visible' }}>
-                      <div className="flex-1 mr-0 md:mr-4 mb-4 md:mb-0">
-                        <div className="text-lg md:text-xl font-bold mb-2">Альтамед-С» — твой надёжный помощник в заботе о здоровье</div>
-                      <div className="text-gray-600 text-sm mb-4">
-                        Не пропускай скидки и важные новости! Подпишись на рассылку и экономь на заботе о здоровье
-                      </div>
-                        <button className="bg-[#13AB7B] text-white rounded-full px-8 py-3 mt-2 w-full md:w-auto">
-                        Подписаться
-                      </button>
-                    </div>
-                      <div className="hidden md:block flex-shrink-0 w-1/3 promo-image-container" style={{ overflow: 'visible', position: 'relative', zIndex: 10, transform: 'scale(1.55) translateX(30px) translateY(20px)', transformOrigin: 'bottom right' }}>
-                      <Image
-                        src="/images/icons/banersoc.png" 
-                        alt="Мобильное приложение Альтамед-С" 
-                        width={1600} 
-                        height={2200}
-                        className="object-contain"
-                        style={{ width: '100%', height: '357px' }}
-                      />
-                    </div>
-                  </div>
-              
-                  </div>
-                </div>
+       
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Акции и специальные предложения */}
+      {/* Популярные услуги стоматологии */}
       <section className="py-8">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-black mb-6 text-center md:text-left px-4 md:px-0 max-w-full overflow-hidden text-ellipsis">
-            Акции и специальные предложения
+        <div className="mx-auto px-4" style={{ maxWidth: '83rem' }}>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8 text-center ml-0 md:ml-4 lg:ml-8">
+            Популярные услуги стоматологии
           </h2>
           
-          {/* Контейнер для акций */}
-          {/* Мобильная версия - вертикальные блоки */}
-          <div className="md:hidden px-4">
-            {/* Слайдер контейнер */}
-            <div className="relative overflow-hidden">
-              <div 
-                className="flex transition-transform duration-300 ease-in-out"
-                style={{ transform: `translateX(-${currentPromoSlide * 100}%)` }}
-              >
-                {/* Слайд 1 */}
-                <div className="w-full flex-shrink-0 flex flex-col gap-4">
-                  {/* Блок "Скидки на анализы!" */}
-                  <div className="bg-[#DAF2FF] rounded-[20px] p-4 h-[180px] flex relative overflow-hidden">
-                    <div className="flex-1 flex flex-col justify-between z-10">
-                      <div>
-                        <h3 className="text-lg font-bold mb-2">Скидки на анализы!</h3>
-                        <p className="text-sm text-gray-600 mb-1">Понедельник, среда, пятница - 10%</p>
-                        <p className="text-sm text-gray-600">Воскресенье - 15%</p>
-                      </div>
-                      <div className="flex items-center">
-                        <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="bg-white rounded-[20px] shadow-lg overflow-hidden mx-4 md:mx-0">
+            <div className="flex flex-col md:flex-row min-h-[600px]">
+              {/* Левая навигационная панель */}
+              <div className="w-full md:w-1/3 bg-slate-700">
+                <div className="p-6">
+                  <div className="space-y-2">
+                    {servicesData.map((category, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setActiveCategory(index)}
+                        className={`w-full text-left p-4 rounded-lg transition-all duration-200 flex items-center justify-between group ${
+                          activeCategory === index
+                            ? 'bg-emerald-500 text-white'
+                            : 'text-gray-300 hover:bg-slate-600 hover:text-white'
+                        }`}
+                      >
+                        <span className="font-medium">{category.title}</span>
+                        <svg 
+                          className={`w-5 h-5 transition-transform duration-200 ${
+                            activeCategory === index ? 'rotate-90' : ''
+                          }`} 
+                          fill="none" 
+                          viewBox="0 0 24 24" 
+                          stroke="currentColor"
+                        >
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
-                      </div>
-                    </div>
-                    <div className="absolute right-0 bottom-0 w-[120px] h-[125px] overflow-hidden">
-                      <Image 
-                        src="/images/doctors/Альтамед врачи.png" 
-                        alt="Альтамед врачи" 
-                        width={120} 
-                        height={160}
-                        className="object-contain h-full"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Блоки в ряд */}
-                  <div className="grid grid-cols-2 gap-2">
-                    {/* Блок "Время заботы о себе" */}
-                    <div className="bg-[#FFD9E0] rounded-[20px] p-3 h-[140px] flex flex-col justify-between relative overflow-hidden">
-                      <div>
-                        <h3 className="text-sm font-semibold mb-1">Время заботы о себе</h3>
-                        <p className="text-xs">Пройдите чек-ап!</p>
-                      </div>
-                      <div className="flex items-center">
-                        <svg className="w-3 h-3 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                      <div className="absolute right-1 top-1/2 transform -translate-y-1/2 w-[60px] h-[60px]">
-                        <Image 
-                          src="/images/icons/one.png" 
-                          alt="Медицинский чек-ап" 
-                          width={60} 
-                          height={60}
-                          className="object-contain"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Блок "Скидки пенсионерам" */}
-                    <div className="bg-[#FADFFF] rounded-[20px] p-3 h-[140px] flex flex-col justify-between relative overflow-hidden">
-                      <div>
-                        <h3 className="text-sm font-semibold mb-1">Скидки пенсионерам</h3>
-                        <p className="text-xs">Специальные условия</p>
-                      </div>
-                      <div className="flex items-center">
-                        <svg className="w-3 h-3 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                      <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-[70px] h-[40px]">
-                        <Image 
-                          src="/images/icons/promo-5.png" 
-                          alt="Скидки пенсионерам" 
-                          width={70} 
-                          height={40}
-                          className="object-contain"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Слайд 2 */}
-                <div className="w-full flex-shrink-0 flex flex-col gap-4">
-                  {/* Блок "Гастроскопия и колоноскопия" */}
-                  <div className="bg-[#DBF0E9] rounded-[20px] p-4 h-[180px] flex relative overflow-hidden">
-                    <div className="flex-1 flex flex-col justify-between z-10">
-                      <div>
-                        <h3 className="text-lg font-bold mb-2">Скидка 20% на гастроскопию</h3>
-                        <p className="text-sm text-gray-600 mb-1">и колоноскопию</p>
-                        <p className="text-sm text-gray-600">Качественная диагностика</p>
-                      </div>
-                      <div className="flex items-center">
-                        <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-[80px] h-[60px]">
-                      <Image 
-                        src="/images/icons/promo-6.png" 
-                        alt="Гастроскопия" 
-                        width={80} 
-                        height={60}
-                        className="object-contain"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Блоки в ряд */}
-                  <div className="grid grid-cols-2 gap-2">
-                    {/* Блок "КТ диагностика" */}
-                    <div className="bg-[#FFF6C1] rounded-[20px] p-3 h-[140px] flex flex-col justify-between relative overflow-hidden">
-                      <div>
-                        <h3 className="text-sm font-semibold mb-1">Скидка 30% на КТ</h3>
-                        <p className="text-xs">для взрослых и детей</p>
-                      </div>
-                      <div className="flex items-center">
-                        <svg className="w-3 h-3 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                      <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-[60px] h-[30px]">
-                        <Image
-                          src="/images/icons/promoKT.png" 
-                          alt="КТ сканирование" 
-                          width={60} 
-                          height={30}
-                          className="object-contain"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Дополнительный блок */}
-                    <div className="bg-[#E8F4FD] rounded-[20px] p-3 h-[140px] flex flex-col justify-between relative overflow-hidden">
-                      <div>
-                        <h3 className="text-sm font-semibold mb-1">Бесплатная консультация</h3>
-                        <p className="text-xs">при первом обращении</p>
-                      </div>
-                      <div className="flex items-center">
-                        <svg className="w-3 h-3 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Слайд 3 */}
-                <div className="w-full flex-shrink-0 flex flex-col gap-4">
-                  {/* Блок "Семейное здоровье" */}
-                  <div className="bg-[#E8F5E8] rounded-[20px] p-4 h-[180px] flex relative overflow-hidden">
-                    <div className="flex-1 flex flex-col justify-between z-10">
-                      <div>
-                        <h3 className="text-lg font-bold mb-2">Семейное здоровье</h3>
-                        <p className="text-sm text-gray-600 mb-1">Комплексные программы</p>
-                        <p className="text-sm text-gray-600">для всей семьи</p>
-                      </div>
-                      <div className="flex items-center">
-                        <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Блоки в ряд */}
-                  <div className="grid grid-cols-2 gap-2">
-                    {/* Блок "Профилактика" */}
-                    <div className="bg-[#FFE8E1] rounded-[20px] p-3 h-[140px] flex flex-col justify-between relative overflow-hidden">
-                      <div>
-                        <h3 className="text-sm font-semibold mb-1">Профилактические осмотры</h3>
-                        <p className="text-xs">По доступным ценам</p>
-                      </div>
-                      <div className="flex items-center">
-                        <svg className="w-3 h-3 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </div>
-
-                    {/* Блок "Детское здоровье" */}
-                    <div className="bg-[#F0E8FF] rounded-[20px] p-3 h-[140px] flex flex-col justify-between relative overflow-hidden">
-                      <div>
-                        <h3 className="text-sm font-semibold mb-1">Детское здоровье</h3>
-                        <p className="text-xs">Специальные цены</p>
-                      </div>
-                      <div className="flex items-center">
-                        <svg className="w-3 h-3 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </div>
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
 
-              {/* Навигационные стрелки */}
-              <button 
-                onClick={prevPromoSlide} 
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/70 rounded-full p-2 shadow-md hover:bg-white z-10"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              <button 
-                onClick={nextPromoSlide} 
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/70 rounded-full p-2 shadow-md hover:bg-white z-10"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-
-              {/* Индикаторы слайдов */}
-              <div className="flex justify-center mt-4 space-x-2">
-                {[0, 1, 2].map((index) => (
-                  <button
-                    key={index}
-                    onClick={() => goToPromoSlide(index)}
-                    className={`w-2 h-2 rounded-full ${
-                      currentPromoSlide === index ? "bg-emerald-500" : "bg-gray-300"
-                    }`}
-                  ></button>
-                ))}
-              </div>
-            </div>
-
-            {/* Кнопка "Все акции и спецпредложения" для мобильной версии */}
-            <button className="w-full bg-white border border-gray-200 text-black rounded-[20px] h-[46px] shadow-sm flex items-center justify-center font-medium text-sm mt-4">
-              Все акции и спецпредложения &gt;
-            </button>
-          </div>
-
-          {/* Десктопная версия - оригинальные блоки */}
-          <div className="hidden md:flex flex-col lg:flex-row gap-6 justify-center max-w-[1300px] mx-auto px-4 lg:px-0">
-            {/* Левый большой блок */}
-            <div className="bg-[#DAF2FF] rounded-[20px] w-full lg:w-[593px] h-[300px] md:h-[374px] flex flex-shrink-0 relative overflow-hidden">
-              <div className="p-6 md:p-8 flex flex-col justify-between z-10 w-full lg:w-[60%]">
-                <div>
-                  <h3 className="text-2xl md:text-3xl font-bold mb-4">Скидки на анализы!</h3>
-                  <div className="text-black text-sm md:text-base">
-                    <p>Понедельник, среда, пятница - 10%</p>
-                    <p>Воскресенье - 15%</p>
-                  </div>
+              {/* Правая панель с услугами */}
+              <div className="w-full md:w-2/3 p-6 md:p-8">
+                <div className="mb-6">
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-2">
+                    {servicesData[activeCategory].title}
+                  </h3>
+                  <div className="h-1 bg-emerald-500 w-16 rounded"></div>
                 </div>
-                
-                <button className="bg-white text-black rounded-full px-8 py-2 w-fit">
-                  Подробнее
-                </button>
-              </div>
-              
-              <div className="hidden lg:block absolute bottom-0 right-0 h-full w-[40%]">
-                <Image 
-                  src="/images/doctors/Альтамед врачи.png" 
-                  alt="Альтамед врачи" 
-                  width={450} 
-                  height={650}
-                  className="object-contain absolute bottom-0 right-4"
-                />
-              </div>
-            </div>
-            
-            {/* Правая колонка с 4 блоками */}
-            <div className="flex flex-col gap-4 md:gap-6 flex-1">
-              {/* Верхний ряд */}
-              <div className="flex flex-col md:flex-row gap-4 md:gap-6">
-                {/* Блок 1 */}
-                <div className="bg-[#FFD9E0] rounded-[20px] w-full md:w-[332px] h-[175px] p-4 md:p-6 flex flex-col justify-between relative overflow-hidden">
-                  <div>
-                    <h3 className="text-sm md:text-base font-semibold mb-1 overflow-hidden text-ellipsis">Время заботы о себе</h3>
-                    <p className="text-xs md:text-sm">Пройдите чек-ап!</p>
-                  </div>
-                  
-                  <button className="bg-white text-black rounded-full px-4 md:px-6 py-1 w-fit text-xs md:text-sm">
-                    Подробнее
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  {servicesData[activeCategory].services.map((service, serviceIndex) => (
+                    <div
+                      key={serviceIndex}
+                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer border border-gray-200"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0"></div>
+                        <span className="text-gray-700 font-medium text-sm md:text-base leading-tight">
+                          {service.name}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2 flex-shrink-0 ml-4">
+                        <span className="font-semibold text-emerald-600 text-sm md:text-base whitespace-nowrap">
+                          {service.price}
+                        </span>
+                        <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-8 text-center">
+                  <button className="bg-emerald-500 text-white px-8 py-3 rounded-full font-medium hover:bg-emerald-600 transition-colors">
+                    Записаться на консультацию
                   </button>
-                  
-                  <div className="hidden md:block absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <Image 
-                      src="/images/icons/one.png" 
-                      alt="Медицинский чек-ап" 
-                      width={140} 
-                      height={140}
-                      className="object-contain"
-                    />
-                  </div>
-                </div>
-                
-                {/* Блок 2 */}
-                <div className="bg-[#FADFFF] rounded-[20px] w-full md:w-[332px] h-[175px] p-4 md:p-6 flex flex-col justify-between relative overflow-hidden">
-                  <div>
-                    <h3 className="text-sm md:text-base font-semibold mb-1 overflow-hidden text-ellipsis">Скидки пенсионерам</h3>
-                  </div>
-                  
-                  <button className="bg-white text-black rounded-full px-4 md:px-6 py-1 w-fit text-xs md:text-sm">
-                    Подробнее
-                  </button>
-                  
-                  <div className="hidden md:block absolute right-0 top-1/2 transform -translate-y-1/2">
-                    <Image 
-                      src="/images/icons/promo-5.png" 
-                      alt="Пластика век" 
-                      width={250} 
-                      height={120}
-                      className="object-contain"
-                    />
-                  </div>
-                </div>
-              </div>
-              
-              {/* Нижний ряд */}
-              <div className="flex flex-col md:flex-row gap-4 md:gap-6">
-                {/* Блок 3 */}
-                <div className="bg-[#DBF0E9] rounded-[20px] w-full md:w-[332px] h-[175px] p-4 md:p-6 flex flex-col justify-between relative overflow-hidden">
-                  <div>
-                    <h3 className="text-sm md:text-base font-semibold mb-1 overflow-hidden text-ellipsis">Скидка 20% на гастроскопию и колоноскопию</h3>
-                  </div>
-                  
-                  <button className="bg-white text-black rounded-full px-4 md:px-6 py-1 w-fit text-xs md:text-sm">
-                    Подробнее
-                  </button>
-                  
-                  <div className="hidden md:block absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <Image 
-                      src="/images/icons/promo-6.png" 
-                      alt="Гастроскопия" 
-                      width={120} 
-                      height={80}
-                      className="object-contain"
-                    />
-                  </div>
-                </div>
-                
-                {/* Блок 4 */}
-                <div className="bg-[#FFF6C1] rounded-[20px] w-full md:w-[332px] h-[175px] p-4 md:p-6 flex flex-col justify-between relative overflow-hidden">
-                  <div>
-                    <h3 className="text-sm md:text-base font-semibold mb-1 overflow-hidden text-ellipsis">
-                      Скидка 30% на КТ<br />для взрослых и<br /> детей
-                    </h3>
-                  </div>
-                  
-                  <button className="bg-white text-black rounded-full px-4 md:px-6 py-1 w-fit text-xs md:text-sm">
-                    Подробнее
-                  </button>
-                  
-                  <div className="hidden md:block absolute right-0 top-1/2 transform -translate-y-1/2">
-                    <Image
-                      src="/images/icons/promoKT.png" 
-                      alt="КТ сканирование" 
-                      width={180} 
-                      height={80}
-                      className="object-contain"
-                    />
-                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          
-          {/* Кнопка "Все акции и спецпредложения" */}
-          <div className="hidden md:flex mt-6 justify-center md:justify-start px-4 md:px-0">
-            <button className="bg-white border border-gray-200 text-black rounded-[40px] w-full md:w-[316.63px] h-[46px] shadow-sm flex items-center justify-center font-medium text-sm md:text-base">
-              Все акции и спецпредложения&gt;
-            </button>
           </div>
         </div>
       </section>
 
-      {/* Специалисты слайдер */}
+      {/* Преимущества клиники */}
+      <section className="py-8">
+        <div className="mx-auto px-4" style={{ maxWidth: '83rem' }}>
+          <h2 className="text-2xl md:text-3xl font-bold text-black mb-2 text-center ml-0 md:ml-4 lg:ml-8">
+          Сеть медицинских центров 
+          </h2>
+          <h3 className="text-xl md:text-2xl font-bold text-black mb-8 text-center ml-0 md:ml-4 lg:ml-8">
+          «Альтамед-с»
+          </h3>
+          
+          <div className="bg-gray-50 rounded-[20px] p-6 md:p-8 mx-4 md:mx-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+              {/* Прозрачные цены */}
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-12 h-12  rounded-lg flex items-center justify-center">
+                  <Image
+                    src="/images/icons/цены.svg"
+                    alt="Цены"
+                    width={132}
+                    height={32}
+                    className="w-18 h-18"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-gray-800 mb-2">Прозрачные цены</h4>
+                  <p className="text-gray-600 text-sm">Составление предварительного финансового плана лечения</p>
+                </div>
+              </div>
+
+              {/* Ваш комфорт */}
+              <div className="flex gap-4">
+              <div className="flex-shrink-0 w-12 h-12  rounded-lg flex items-center justify-center">
+                  <Image
+                    src="/images/icons/stool.svg"
+                    alt="Цены"
+                    width={132}
+                    height={32}
+                    className="w-18 h-18"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-gray-800 mb-2">Ваш комфорт — наш приоритет</h4>
+                  <p className="text-gray-600 text-sm">Используем современные методики обезболивания: анестезию, наркоз или седацию</p>
+                </div>
+              </div>
+
+              {/* Передовые технологии */}
+              <div className="flex gap-4">
+              <div className="flex-shrink-0 w-12 h-12  rounded-lg flex items-center justify-center">
+                  <Image
+                    src="/images/icons/texnj2.svg"
+                    alt="Цены"
+                    width={132}
+                    height={32}
+                    className="w-18 h-18"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-gray-800 mb-2">Передовые технологии</h4>
+                  <p className="text-gray-600 text-sm">Применяем в работе современное стоматологическое и диагностическое оборудование экспертного уровня</p>
+                </div>
+              </div>
+
+              {/* Опыт и репутация */}
+              <div className="flex gap-4">
+              <div className="flex-shrink-0 w-12 h-12  rounded-lg flex items-center justify-center">
+                  <Image
+                    src="/images/icons/oput.svg"
+                    alt="Цены"
+                    width={132}
+                    height={32}
+                    className="w-18 h-18"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-gray-800 mb-2">Опыт и репутация</h4>
+                  <p className="text-gray-600 text-sm">С 2002 года оказываем полный спектр стоматологических услуг для всей семьи</p>
+                </div>
+              </div>
+
+              {/* Команда профессионалов */}
+              <div className="flex gap-4">
+              <div className="flex-shrink-0 w-12 h-12  rounded-lg flex items-center justify-center">
+                  <Image
+                    src="/images/icons/com.svg"
+                    alt="Цены"
+                    width={132}
+                    height={32}
+                    className="w-18 h-18"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-gray-800 mb-2">Команда профессионалов</h4>
+                  <p className="text-gray-600 text-sm">К вашим услугам более 100 специалистов, включая кандидатов наук и врачей с международными сертификатами</p>
+                </div>
+              </div>
+
+              {/* Развитая сеть клиник */}
+              <div className="flex gap-4">
+              <div className="flex-shrink-0 w-12 h-12  rounded-lg flex items-center justify-center">
+                  <Image
+                    src="/images/icons/ste.svg"
+                    alt="Цены"
+                    width={132}
+                    height={32}
+                    className="w-18 h-18"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-gray-800 mb-2">Развитая сеть клиник</h4>
+                  <p className="text-gray-600 text-sm">Принимаем пациентов в 9 стоматологических отделениях в разных районах Москвы</p>
+                </div>
+              </div>
+
+              {/* Довольные клиенты */}
+              <div className="flex gap-4">
+              <div className="flex-shrink-0 w-12 h-12  rounded-lg flex items-center justify-center">
+                  <Image
+                    src="/images/icons/teans.svg"
+                    alt="Цены"
+                    width={132}
+                    height={32}
+                    className="w-18 h-18"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-gray-800 mb-2">Более 10 000 довольных клиентов</h4>
+                  <p className="text-gray-600 text-sm">Заботимся о красоте улыбок взрослых и самых маленьких пациентов</p>
+                </div>
+              </div>
+
+              {/* Собственная лаборатория */}
+              <div className="flex gap-4">
+              <div className="flex-shrink-0 w-12 h-12  rounded-lg flex items-center justify-center">
+                  <Image
+                    src="/images/icons/lab.svg"
+                    alt="Цены"
+                    width={132}
+                    height={32}
+                    className="w-18 h-18"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-gray-800 mb-2">Собственная зуботехническая лаборатория</h4>
+                  <p className="text-gray-600 text-sm">Изготавливаем разнообразные зубные конструкции, в том числе повышенной сложности</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       <section className="py-8">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <h2 className="text-2xl md:text-3xl font-bold text-black mb-6 text-center md:text-left">
-            Наши специалисты
+          Звезды медицины
           </h2>
           
           {/* Контейнер с врачами - единый слайдер для всех устройств */}
@@ -1242,7 +1253,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-
+  
       {/* Пресс-центр */}
       <section className="py-8">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
@@ -1431,9 +1442,9 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
-      {/* Лицензии */}
-      <section className="py-8">
+
+            {/* Лицензии */}
+            <section className="py-8">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <h2 className="text-2xl md:text-3xl font-bold text-black mb-6 text-center md:text-left max-w-full overflow-hidden text-ellipsis">
             Лицензии
@@ -1483,8 +1494,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-   
     </div>
   );
-}
+} 
