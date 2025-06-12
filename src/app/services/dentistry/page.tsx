@@ -1094,22 +1094,22 @@ export default function DentistryPage() {
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 ref={doctorsSliderRef}
               >
-                {/* Врач 1 - Добротюк Альбина Витальевна */}
+                {/* Врач 1 - Прикуле Елена Юрьевна */}
                 <div className="w-[280px] md:w-[290px] h-[400px] md:h-[452px] bg-white rounded-[20px] border border-gray-100 shadow-sm overflow-hidden flex-shrink-0">
                   <div className="h-[180px] md:h-[220px] bg-gray-50">
                     <Image 
-                      src="/images/doctors/Альбина.png" 
-                      alt="Добротюк Альбина Витальевна" 
-                      width={290} 
-                      height={220}
-                      className="w-full h-full object-cover"
+                      src="/images/doctors/prikule-elena-yurevna Альтамед-с Одинцово.png" 
+                      alt="Прикуле Елена Юрьевна Стоматолог Альтамед-с Одинцово записаться на примем - +8 (495) 255-44-50" 
+                      width={210} 
+                      height={120}
+                      className="w-full h-full"
                     />
                   </div>
                   <div className="p-4 md:p-6 flex flex-col justify-between h-[220px] md:h-[232px]">
                     <div>
-                      <h3 className="font-bold text-lg text-black mb-2">Добротюк Альбина Витальевна</h3>
-                      <p className="text-sm text-gray-600 mb-3">Стаж: 11 лет</p>
-                      <p className="text-sm text-gray-700 leading-relaxed">Педиатр</p>
+                      <h3 className="font-bold text-lg text-black mb-2">Прикуле Елена Юрьевна</h3>
+                      <p className="text-sm text-gray-600 mb-3">Стаж: с 2002 года</p>
+                      <p className="text-sm text-gray-700 leading-relaxed">Стоматолог-терапевт</p>
                     </div>
                     <button className="w-full h-12 bg-emerald-500 text-white rounded-full text-sm font-medium hover:bg-emerald-600 transition-colors">
                       Записаться онлайн
@@ -1121,18 +1121,18 @@ export default function DentistryPage() {
                 <div className="w-[280px] md:w-[290px] h-[400px] md:h-[452px] bg-white rounded-[20px] border border-gray-100 shadow-sm overflow-hidden flex-shrink-0">
                   <div className="h-[180px] md:h-[220px] bg-gray-50">
                     <Image
-                      src="/images/doctors/doc2.png" 
-                      alt="Дмитриев Алексей Олегович" 
+                      src="/images/doctors/Ярулова Вероника Юрьевна Стоматолог Альтамед-с Одинцово записаться на примем - +8 (495) 255-44-50.webp" 
+                      alt="Ярулова Вероника Юрьевна Стоматолог Альтамед-с Одинцово записаться на примем - +8 (495) 255-44-50" 
                       width={290} 
                       height={220}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full"
                     />
                   </div>
                   <div className="p-4 md:p-6 flex flex-col justify-between h-[220px] md:h-[232px]">
                     <div>
-                      <h3 className="font-bold text-lg text-black mb-2">Дмитриев Алексей Олегович</h3>
-                      <p className="text-sm text-gray-600 mb-3">Стаж: 22 года</p>
-                      <p className="text-sm text-gray-700 leading-relaxed">Невролог, мануальный терапевт, рефлексотерапевт</p>
+                      <h3 className="font-bold text-lg text-black mb-2">Ярулова Вероника Юрьевна</h3>
+                      <p className="text-sm text-gray-600 mb-3">Стаж: с 2002 года</p>
+                      <p className="text-sm text-gray-700 leading-relaxed">Стоматолог-терапевт</p>
                     </div>
                     <button className="w-full h-12 bg-emerald-500 text-white rounded-full text-sm font-medium hover:bg-emerald-600 transition-colors">
                       Записаться онлайн
@@ -1140,22 +1140,22 @@ export default function DentistryPage() {
                   </div>
                 </div>
                 
-                {/* Врач 3 - Ютанин Сергей Николаевич */}
+                {/* Врач 3 - Крошкин Александр Дмитриевич */}
                 <div className="w-[280px] md:w-[290px] h-[400px] md:h-[452px] bg-white rounded-[20px] border border-gray-100 shadow-sm overflow-hidden flex-shrink-0">
                   <div className="h-[180px] md:h-[220px] bg-gray-50">
                     <Image
-                      src="/images/doctors/doc3.png" 
-                      alt="Ютанин Сергей Николаевич" 
+                      src="/images/doctors/Крошкин-Александр-Дмитриевич-Стоматолог-Альтамед-с-Одинцово-записаться-на-примем-8-_495_-255-44-50.webp" 
+                      alt="Крошкин Александр Дмитриевич Стоматолог Альтамед-с Одинцово записаться на примем - +8 (495) 255-44-50" 
                       width={290} 
                       height={220}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full"
                     />
                   </div>
                   <div className="p-4 md:p-6 flex flex-col justify-between h-[220px] md:h-[232px]">
                     <div>
-                      <h3 className="font-bold text-lg text-black mb-2">Ютанин Сергей Николаевич</h3>
-                      <p className="text-sm text-gray-600 mb-3">Стаж: 49 лет</p>
-                      <p className="text-sm text-gray-700 leading-relaxed">Специальность — хирург, маммолог</p>
+                      <h3 className="font-bold text-lg text-black mb-2">Крошкин Александр Дмитриевич</h3>
+                      <p className="text-sm text-gray-600 mb-3">Стаж: с 2006 года</p>
+                      <p className="text-sm text-gray-700 leading-relaxed">Специальность — Стоматолог-ортопед</p>
                     </div>
                     <button className="w-full h-12 bg-emerald-500 text-white rounded-full text-sm font-medium hover:bg-emerald-600 transition-colors">
                       Записаться онлайн
@@ -1163,22 +1163,22 @@ export default function DentistryPage() {
                   </div>
                 </div>
                 
-                {/* Врач 4 - Лория Ольга Викторовна */}
+                {/* Врач 4 - Рубцов Роман Владимирович */}
                 <div className="w-[280px] md:w-[290px] h-[400px] md:h-[452px] bg-white rounded-[20px] border border-gray-100 shadow-sm overflow-hidden flex-shrink-0">
                   <div className="h-[180px] md:h-[220px] bg-gray-50">
                     <Image
-                      src="/images/doctors/doc4.png" 
-                      alt="Лория Ольга Викторовна" 
+                      src="/images/doctors/Рубцов-Роман-Владимирович Альтамед-с Одинцово.webp" 
+                      alt="Рубцов Роман Владимирович Стоматолог Альтамед-с Одинцово записаться на примем - +8 (495) 255-44-50" 
                       width={290} 
                       height={220}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full"
                     />
                   </div>
                   <div className="p-4 md:p-6 flex flex-col justify-between h-[220px] md:h-[232px]">
                     <div>
-                      <h3 className="font-bold text-lg text-black mb-2">Лория Ольга Викторовна</h3>
-                      <p className="text-sm text-gray-600 mb-3">Стаж: 20 лет</p>
-                      <p className="text-sm text-gray-700 leading-relaxed">УЗИ-диагност</p>
+                      <h3 className="font-bold text-lg text-black mb-2">Рубцов Роман Владимирович</h3>
+                      <p className="text-sm text-gray-600 mb-3">Стаж: с 2000 года</p>
+                      <p className="text-sm text-gray-700 leading-relaxed">Стоматолог-ортопед</p>
                     </div>
                     <button className="w-full h-12 bg-emerald-500 text-white rounded-full text-sm font-medium hover:bg-emerald-600 transition-colors">
                       Записаться онлайн
@@ -1188,22 +1188,22 @@ export default function DentistryPage() {
 
       
 
-                {/* Врач 6 - Дополнительный врач */}
+                {/* Врач 6 - Рубцова Ольга Юрьевна */}
                 <div className="w-[280px] md:w-[290px] h-[400px] md:h-[452px] bg-white rounded-[20px] border border-gray-100 shadow-sm overflow-hidden flex-shrink-0">
                   <div className="h-[180px] md:h-[220px] bg-gray-50">
                     <Image
-                      src="/images/doctors/Альбина.png" 
-                      alt="Иванова Марина Сергеевна" 
+                      src="/images/doctors/Рубцова-Ольга-Юрьевна_-Стоматолог-хирург-—-Медицинский-центр-Альтамед-С.webp" 
+                      alt="Рубцова Ольга Юрьевна Стоматолог Альтамед-с Одинцово записаться на примем - +8 (495) 255-44-50" 
                       width={290} 
                       height={220}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full"
                     />
                   </div>
                   <div className="p-4 md:p-6 flex flex-col justify-between h-[220px] md:h-[232px]">
                     <div>
-                      <h3 className="font-bold text-lg text-black mb-2">Иванова Марина Сергеевна</h3>
-                      <p className="text-sm text-gray-600 mb-3">Стаж: 15 лет</p>
-                      <p className="text-sm text-gray-700 leading-relaxed">Кардиолог, терапевт</p>
+                      <h3 className="font-bold text-lg text-black mb-2">Рубцова Ольга Юрьевна</h3>
+                      <p className="text-sm text-gray-600 mb-3">Стаж: с 2001 года</p>
+                      <p className="text-sm text-gray-700 leading-relaxed">Стоматолог-хирург, стоматолог-терапевт</p>
                     </div>
                     <button className="w-full h-12 bg-emerald-500 text-white rounded-full text-sm font-medium hover:bg-emerald-600 transition-colors">
                       Записаться онлайн
